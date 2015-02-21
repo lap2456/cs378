@@ -52,10 +52,7 @@ public class WordStatisticsAggregator {
 		* The input files are in a csv format so split them into all of the paths,
 		* iterate through them and set them to the job
 		*/
-		String[] inputPaths = appArgs[0].split(",");
-		for ( String inputPath : inputPaths ) {
-		  FileInputFormat.addInputPath(job, new Path(inputPath));
-		} 
+		FileInputFormat.addInputPaths(job, appArgs[0]);
 		FileOutputFormat.setOutputPath(job, new Path(appArgs[1]));
 
 		// Initiate the map-reduce job, and wait for completion.
