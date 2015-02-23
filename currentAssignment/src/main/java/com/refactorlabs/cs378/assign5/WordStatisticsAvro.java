@@ -1,10 +1,8 @@
 package com.refactorlabs.cs378.assign5;
 
-import com.refactorlabs.cs378.utils.Utils;
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.Pair;
 import org.apache.avro.mapreduce.AvroJob;
-import org.apache.avro.mapreduce.AvroKeyOutputFormat;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -14,57 +12,57 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 /**
- * WordCount example using Avro defined class for the word count data,
- * to demonstrate how to use Avro defined objects.
+ * WordStatisticsAvro main driver program for running word statistics
+ * using Avro Object
+ * 
+ * @author Louis Pujol (louispujol@yahoo.com)
+ * @author David Franke (dfranke@cs.utexas.edu)
  *
  * Here the outputs (key and value) are both Avro objects and will be combined into
  * a Pair as the key, and null as the value.
- * written with output format: AvroKeyOutputFormat (creates an Avro container file).
+ * written with output format: TextOutputFormat (creates an Avro container file).
  */
-public class WordCountE extends Configured implements Tool {
-
+public class WordStatisticsAvro extends Configured implements Tool {
 	/**
 	 * The run() method is called (indirectly) from main(), and contains all the job
 	 * setup and configuration.
 	 */
 	public int run(String[] args) throws Exception {
 		if (args.length != 2) {
-			System.err.println("Usage: WordCountE <input path> <output path>");
+			System.err.println("Usage: WordCountAvro <input path> <output path>");
 			return -1;
 		}
 
 		Configuration conf = getConf();
-		Job job = new Job(conf, "WordCountE");
+		Job job = new Job(conf, "WordStatisticsAvro");
 		String[] appArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 
 		// Identify the JAR file to replicate to all machines.
-		job.setJarByClass(WordCountC.class);
+		job.setJarByClass(WordStatisticsAvro.class);
 		// Use this JAR first in the classpath (We also set a bootstrap script in AWS)
 		conf.set("mapreduce.user.classpath.first", "true");
 
 		// Specify the Map
 		job.setInputFormatClass(TextInputFormat.class);
-		job.setMapperClass(WordCountMapper.class);
+		job.setMapperClass(MapClass.class);
 		job.setMapOutputKeyClass(Text.class);
-		AvroJob.setMapOutputValueSchema(job, WordCountData.getClassSchema());
+		AvroJob.setMapOutputValueSchema(job, WordStatisticsData.getClassSchema());
 
 		// Specify the Reduce
-		job.setOutputFormatClass(AvroKeyOutputFormat.class);
-		job.setReducerClass(WordCountD.ReduceClass.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
+		job.setReducerClass(ReduceClass.class);
 		AvroJob.setOutputKeySchema(job,
-				Pair.getPairSchema(Schema.create(Schema.Type.STRING), WordCountData.getClassSchema()));
+				Pair.getPairSchema(Schema.create(Schema.Type.STRING), WordStatisticsData.getClassSchema()));
 		job.setOutputValueClass(NullWritable.class);
 
 		// Grab the input file and output directory from the command line.
-		String[] inputPaths = appArgs[0].split(",");
-		for ( String inputPath : inputPaths ) {
-			FileInputFormat.addInputPath(job, new Path(inputPath));
-		}
+		FileInputFormat.addInputPath(job, new Path(appArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(appArgs[1]));
 
 		// Initiate the map-reduce job, and wait for completion.
@@ -79,9 +77,7 @@ public class WordCountE extends Configured implements Tool {
 	 * job and waits for it to complete.
 	 */
 	public static void main(String[] args) throws Exception {
-		Utils.printClassPath();
-		int res = ToolRunner.run(new Configuration(), new WordCountE(), args);
+		int res = ToolRunner.run(new Configuration(), new WordStatisticsAvro(), args);
 		System.exit(res);
 	}
-
 }
