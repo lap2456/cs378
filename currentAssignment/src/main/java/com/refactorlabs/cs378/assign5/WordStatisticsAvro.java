@@ -1,5 +1,8 @@
 package com.refactorlabs.cs378.assign5;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.Pair;
 import org.apache.avro.mapreduce.AvroJob;
@@ -77,7 +80,21 @@ public class WordStatisticsAvro extends Configured implements Tool {
 	 * job and waits for it to complete.
 	 */
 	public static void main(String[] args) throws Exception {
+		printClassPath();
 		int res = ToolRunner.run(new Configuration(), new WordStatisticsAvro(), args);
 		System.exit(res);
+	}
+
+	public static void printClassPath(){
+		//Get the System Classloader
+        ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
+
+        //Get the URLs
+        URL[] urls = ((URLClassLoader)sysClassLoader).getURLs();
+
+        for(int i=0; i< urls.length; i++)
+        {
+            System.out.println(urls[i].getFile());
+        }      
 	}
 }
