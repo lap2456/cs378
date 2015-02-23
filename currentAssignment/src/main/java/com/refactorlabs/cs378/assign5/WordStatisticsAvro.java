@@ -74,7 +74,7 @@ public class WordStatisticsAvro extends Configured implements Tool {
 		return 0;
 	}
 
-	/**
+	/*
 	 * The main method specifies the characteristics of the map-reduce job
 	 * by setting values on the Job object, and then initiates the map-reduce
 	 * job and waits for it to complete.
@@ -85,16 +85,16 @@ public class WordStatisticsAvro extends Configured implements Tool {
 		System.exit(res);
 	}
 
-	public static void printClassPath(){
-		//Get the System Classloader
-        ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
-
-        //Get the URLs
-        URL[] urls = ((URLClassLoader)sysClassLoader).getURLs();
-
-        for(int i=0; i< urls.length; i++)
-        {
-            System.out.println(urls[i].getFile());
-        }      
+   /*
+	* This method will print out the class paths to standard out.
+	*/
+	private static void printClassPath() {
+		ClassLoader cl = ClassLoader.getSystemClassLoader();
+		URL[] urls = ((URLClassLoader) cl).getURLs();
+		System.out.println("classpath BEGIN");
+		for (URL url : urls) {
+			System.out.println(url.getFile());
+		}
+		System.out.println("classpath END");
 	}
 }
