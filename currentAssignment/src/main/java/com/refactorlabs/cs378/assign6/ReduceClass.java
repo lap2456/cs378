@@ -81,18 +81,18 @@ AvroKey<Pair<CharSequence, Session>>, NullWritable> {
 	//timestamp information
 	private List<Impression> getSortedImpressionList(List<Impression> impList) {
 
-		//Create a list of ComparableImpression which wrap
+		//Create a list of ComparableEvent which wrap
 		//Impression objects with comparable interface
-		List<ComparableImpression> sortedImpList = new ArrayList<ComparableImpression>();
+		List<ComparableEvent> sortedImpList = new ArrayList<ComparableEvent>();
 		for (int i = 0 ; i < impList.size() ; i++){
-			ComparableImpression sortedImpression = new ComparableImpression(impList.get(i));
+			ComparableEvent sortedImpression = new ComparableEvent(impList.get(i));
 			sortedImpList.add(sortedImpression);
 		}
 
-		//Sort impressions by timestamp using ComparableImpression class
+		//Sort impressions by timestamp using ComparableEvent class
 		Collections.sort(sortedImpList);
 
-		//Unwrap ComparableImpressions and store in finalImpList
+		//Unwrap ComparableEvent and store in finalImpList
 		List<Impression> finalImpList = new ArrayList<Impression>();
 		for (int i = 0 ; i < sortedImpList.size() ; i++){
 			finalImpList.add(i, sortedImpList.get(i).getMyImp());

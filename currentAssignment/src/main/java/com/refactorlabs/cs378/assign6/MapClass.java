@@ -50,7 +50,6 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		String lat = getFieldValue("lat:", line);
 		String total = getFieldValue("total:", line);
 		String startIndex = getFieldValue("start_index:", line);
-		String timeStamp = getFieldValue("timestamp:", line);
 		String idnumbers = getFieldValue("|id:", line);
 		idnumbers = idnumbers.replaceAll(",", " ");
 		String ab = getFieldValue("ab:", line);
@@ -84,7 +83,6 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		impressionBuilder.setStartIndex(parseValidInt(startIndex));
 		impressionBuilder.setTotal(parseValidInt(total));
 		impressionBuilder.setDomain(getValidatedFieldValue(domain));
-		impressionBuilder.setTimestamp(parseValidLong(timeStamp));
 		//////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////
