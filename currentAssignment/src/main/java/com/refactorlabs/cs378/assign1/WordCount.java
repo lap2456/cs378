@@ -52,7 +52,7 @@ public class WordCount {
 				throws IOException, InterruptedException {
 			String line = value.toString();
 			StringTokenizer tokenizer = new StringTokenizer(line);
-
+			System.out.println(line);
 			context.getCounter(MAPPER_COUNTER_GROUP, "Input Lines").increment(1L);
 
 			// For each word in the input line, emit a count of 1 for that word.
