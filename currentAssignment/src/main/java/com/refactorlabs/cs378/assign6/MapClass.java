@@ -208,6 +208,7 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		int sizeOfLine = line.length();
 
 		//Iterate through the line until we break
+		System.out.println("entering while loop");
 		while(true){
 
 			//If the index is -1, the fieldKey did not appear
@@ -224,7 +225,7 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 			//Increment our offset
 			offset++;
 		}
-
+		System.out.println("broke while loop");
 		//Return final field value
 		return result;
 	}
