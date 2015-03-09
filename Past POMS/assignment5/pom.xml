@@ -7,7 +7,7 @@
     <groupId>com.refactorlabs.cs378</groupId>
     <artifactId>bdp</artifactId>
     <packaging>jar</packaging>
-    <version>0.6</version>
+    <version>0.5</version>
 
     <description>Java code for CS 378 - Big Data Programming</description>
 
@@ -75,17 +75,6 @@
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
 
     </dependencies>
