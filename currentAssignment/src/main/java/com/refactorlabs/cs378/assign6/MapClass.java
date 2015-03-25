@@ -32,17 +32,16 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 	@Override
 	public void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
-/*
 		//Convert our text to string
 		String line = value.toString();
 
-		//Create our session and impression builders
+		//Create our session and event builders
 		Session.Builder sessionBuilder = Session.newBuilder();
-		Impression.Builder impressionBuilder = Impression.newBuilder();
+		Event.Builder eventBuilder = Event.newBuilder();
 
 		//////////////////////////////////////////////////////////
 		//Initialize all of our avro fields
-		String impType = getFieldValue("|type:", line).toUpperCase();
+		String eventType = getFieldValue("|type:", line).toUpperCase();
 		String address = getFieldValue("address:", line);
 		String city = getFieldValue("city:", line);
 		String zip = getFieldValue("zip:", line);
@@ -71,18 +70,18 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		//////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////
-		//Set all of our impression field values
-		impressionBuilder.setAb(getValidatedFieldValue(ab));
-		impressionBuilder.setLon(parseValidDouble(lon));
-		impressionBuilder.setLat(parseValidDouble(lat));
-		impressionBuilder.setAddress(getValidatedFieldValue(address));
-		impressionBuilder.setCity(getValidatedFieldValue(city));
-		impressionBuilder.setZip(getValidatedFieldValue(zip));
-		impressionBuilder.setState(getValidatedFieldValue(state));
-		impressionBuilder.setId(getIdList(idnumbers));
-		impressionBuilder.setStartIndex(parseValidInt(startIndex));
-		impressionBuilder.setTotal(parseValidInt(total));
-		impressionBuilder.setDomain(getValidatedFieldValue(domain));
+		//Set all of our event field values
+		eventBuilder.setAb(getValidatedFieldValue(ab));
+		eventBuilder.setLon(parseValidDouble(lon));
+		eventBuilder.setLat(parseValidDouble(lat));
+		eventBuilder.setAddress(getValidatedFieldValue(address));
+		eventBuilder.setCity(getValidatedFieldValue(city));
+		eventBuilder.setZip(getValidatedFieldValue(zip));
+		eventBuilder.setState(getValidatedFieldValue(state));
+		eventBuilder.setId(getIdList(idnumbers));
+		eventBuilder.setStartIndex(parseValidInt(startIndex));
+		eventBuilder.setTotal(parseValidInt(total));
+		eventBuilder.setDomain(getValidatedFieldValue(domain));
 		//////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////
@@ -96,36 +95,36 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		//////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////
-		//Set all of our impression field values that are enumerated
+		//Set all of our event field values that are enumerated
 		//Simply check to see if string exists in the input text
 		//And set enumerations based on string
 		if (line.contains("action:"))
-			impressionBuilder.setAction(Action.CLICK);
+			eventBuilder.setAction(Action.CLICK);
 		else
-			impressionBuilder.setAction(Action.PAGE_VIEW);
+			eventBuilder.setAction(Action.PAGE_VIEW);
 		if (actionName.contains("PAGE"))
-			impressionBuilder.setActionName(ActionName.DEALER_PAGE_VIEWED);
+			eventBuilder.setActionName(ActionName.DEALER_PAGE_VIEWED);
 		else if (actionName.contains("WEBSITE"))
-			impressionBuilder.setActionName(ActionName.DEALER_WEBSITE_VIEWED);
+			eventBuilder.setActionName(ActionName.DEALER_WEBSITE_VIEWED);
 		else if (actionName.contains("UNHOSTED"))
-			impressionBuilder.setActionName(ActionName.VIEWED_CARFAX_REPORT_UNHOSTED);
+			eventBuilder.setActionName(ActionName.VIEWED_CARFAX_REPORT_UNHOSTED);
 		else if (actionName.contains("CARFAX"))
-			impressionBuilder.setActionName(ActionName.VIEWED_CARFAX_REPORT);
+			eventBuilder.setActionName(ActionName.VIEWED_CARFAX_REPORT);
 		else if (actionName.contains("MORE"))
-			impressionBuilder.setActionName(ActionName.MORE_PHOTOS_VIEWED);
+			eventBuilder.setActionName(ActionName.MORE_PHOTOS_VIEWED);
 		else
-			impressionBuilder.setActionName(ActionName.NONE);
+			eventBuilder.setActionName(ActionName.NONE);
 		if (getFieldValue("vertical:", line).toUpperCase().equals("CARS"))
-			impressionBuilder.setVertical(Vertical.CARS);	
-		if (impType.length() == 0)
-			impressionBuilder.setImpressionType(ImpressionType.SRP);
-		else if (impType.contains("ACTION"))
-			impressionBuilder.setImpressionType(ImpressionType.ACTION);
+			eventBuilder.setVertical(Vertical.CARS);	
+		if (eventType.length() == 0)
+			eventBuilder.setEventType(EventType.SRP);
+		else if (eventType.contains("ACTION"))
+			eventBuilder.setEventType(EventType.ACTION);
 		else
-			impressionBuilder.setImpressionType(ImpressionType.VDP);
+			eventBuilder.setEventType(EventType.VDP);
 
 		if (line.contains("phone_type:tracked"))
-			impressionBuilder.setPhoneType(PhoneType.TRACKED);
+			eventBuilder.setPhoneType(PhoneType.TRACKED);
 		//////////////////////////////////////////////////////////
 
 
@@ -133,15 +132,14 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		word.set(uid+":"+apikey);
 
 
-		//Create impList out of our impression and store in the session
-		List<Impression> impList = new ArrayList<Impression>();
-		impList.add(impressionBuilder.build());
-		sessionBuilder.setImpressions(impList);
+		//Create eventList out of our event and store in the session
+		List<Event> eventList = new ArrayList<Event>();
+		eventList.add(eventBuilder.build());
+		sessionBuilder.setEvents(eventList);
 
 		//Write key and session (wrapped in avro value) to context
 		context.write( word, new AvroValue<Session>(sessionBuilder.build()));
 
-	*/
 	}
 
 	//Parse valid double and return 0.0 if invalid
