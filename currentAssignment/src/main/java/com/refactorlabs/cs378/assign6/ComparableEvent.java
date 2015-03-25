@@ -33,8 +33,8 @@ public class ComparableEvent implements Comparable<ComparableEvent> {
 	@Override
 	public int compareTo(ComparableEvent o) {
 		ComparableEvent event = (ComparableEvent) o;
-		String myTimeStamp = myEvent.getEventTime();
-		String theirTimeStamp = event.getMyEvent().getEventTime();
+		String myTimeStamp = myEvent.getEventTime().toString();
+		String theirTimeStamp = event.getMyEvent().getEventTime().toString();
 		
 		String firstDate = myTimeStamp.substring(0, myTimeStamp.indexOf(" "));
 		String secondDate = theirTimeStamp.substring(0, theirTimeStamp.indexOf(" "));
