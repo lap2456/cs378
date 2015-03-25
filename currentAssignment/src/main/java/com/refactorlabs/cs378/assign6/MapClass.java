@@ -95,7 +95,7 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		eventBuilder.setModel(model);
 		eventBuilder.setTrim(trim == "" ? null : trim);
 		eventBuilder.setSubtrim(subtrim);
-		eventBuilder.setPrice(price == "0.0000" ? null : Float.parseFloat(price));
+		eventBuilder.setPrice(initialPrice == "0.0000" ? null : Float.parseFloat(initialPrice));
 		eventBuilder.setMileage(Integer.parseInt(mileage));
 		eventBuilder.setMpg(Integer.parseInt(mpg));
 		eventBuilder.setExteriorColor(exteriorColor == "null" ? null : exteriorColor);
@@ -109,7 +109,7 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		eventBuilder.setFreeCarfaxReport(initialCarfaxFreeReport == "t" ? true : false);
 		eventBuilder.setCarfaxOneOwner(carfaxOneOwner == "t" ? true : false);
 		eventBuilder.setCpo(initialCPO == "t" ? true : false);
-		eventBuilder.setFeatures(features.split[":"]);
+		eventBuilder.setFeatures(features.split(":"));
 		//////////////////////////////////////////////////////////
 		
 		//////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		else if (fullEventType.startsWith("CLICK"))
 			eventBuilder.setEventType(EventType.CLICK);
 		else if (fullEventType.startsWith("CONTACT FORM"))
-			eventBuilder.setEventType(EventType.CONTACT);
+			eventBuilder.setEventType(EventType.CONTACT_FORM_STATUS);
 		else if (fullEventType.startsWith("EDIT"))
 			eventBuilder.setEventType(EventType.EDIT);
 		else if (fullEventType.startsWith("SHARE"))
@@ -133,48 +133,48 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 			eventBuilder.setEventType(EventType.SUBMIT);
 		else
 			eventBuilder.setEventType(EventType.VISIT);
-		//EventSubType
+		//EventSubtype
 		if (fullEventType.endsWith("CONTACT FORM TYPE"))
-			eventBuilder.setEventSubType(EventSubType.CONTACT_FORM_TYPE);
+			eventBuilder.setEventSubtype(EventSubtype.CONTACT_FORM_TYPE);
 		else if(fullEventType.endsWith("ALTERNATIVES"))
-			eventBuilder.setEventSubType(EventSubType.ALTERNATIVE);
+			eventBuilder.setEventSubtype(EventSubtype.ALTERNATIVE);
 		else if(fullEventType.endsWith("CONTACT BANNER"))
-			eventBuilder.setEventSubType(EventSubType.CONTACT_BANNER);
+			eventBuilder.setEventSubtype(EventSubtype.CONTACT_BANNER);
 		else if(fullEventType.endsWith("CONTACT BUTTON"))
-			eventBuilder.setEventSubType(EventSubType.CONTACT_BUTTON);
+			eventBuilder.setEventSubtype(EventSubtype.CONTACT_BUTTON);
 		else if(fullEventType.endsWith("DEALER PHONE"))
-			eventBuilder.setEventSubType(EventSubType.DEALER_PHONE);
+			eventBuilder.setEventSubtype(EventSubtype.DEALER_PHONE);
 		else if(fullEventType.endsWith("FEATURES"))
-			eventBuilder.setEventSubType(EventSubType.FEATURES);
+			eventBuilder.setEventSubtype(EventSubtype.FEATURES);
 		else if(fullEventType.endsWith("GET DIRECTIONS"))
-			eventBuilder.setEventSubType(EventSubType.GET_DIRECTIONS);
+			eventBuilder.setEventSubtype(EventSubtype.GET_DIRECTIONS);
 		else if(fullEventType.endsWith("SHOW MORE BADGES"))
-			eventBuilder.setEventSubType(EventSubType.SHOW_MORE_BADGES);
+			eventBuilder.setEventSubtype(EventSubtype.SHOW_MORE_BADGES);
 		else if(fullEventType.endsWith("TEST DRIVE LINK"))
-			eventBuilder.setEventSubType(EventSubType.TEST_DRIVE_LINK);
+			eventBuilder.setEventSubtype(EventSubtype.TEST_DRIVE_LINK);
 		else if(fullEventType.endsWith("VEHICLE HISTORY REPORT LINK"))
-			eventBuilder.setEventSubType(EventSubType.VEHICLE_HISTORY);
+			eventBuilder.setEventSubtype(EventSubtype.VEHICLE_HISTORY);
 		else if(fullEventType.endsWith("FORM ERROR"))
-			eventBuilder.setEventSubType(EventSubType.FORM_ERROR);
+			eventBuilder.setEventSubtype(EventSubtype.FORM_ERROR);
 		else if(fullEventType.endsWith("FORM SUCCESS"))
-			eventBuilder.setEventSubType(EventSubType.FORM_SUCCESS);
+			eventBuilder.setEventSubtype(EventSubtype.FORM_SUCCESS);
 		else if(fullEventType.endsWith("CONTACT FORM"))
-			eventBuilder.setEventSubType(EventSubType.CONTACT_FORM);
+			eventBuilder.setEventSubtype(EventSubtype.CONTACT_FORM);
 		else if(fullEventType.endsWith("BADGE DETAIL"))
-			eventBuilder.setEventSubType(EventSubType.BADGE_DETAIL);
+			eventBuilder.setEventSubtype(EventSubtype.BADGE_DETAIL);
 		else if(fullEventType.endsWith("PHOTO MODAL"))
-			eventBuilder.setEventSubType(EventSubType.PHOTO_MODAL);
+			eventBuilder.setEventSubtype(EventSubtype.PHOTO_MODAL);
 		else if(fullEventType.endsWith("BADGES"))
-			eventBuilder.setEventSubType(EventSubType.BADGES);
+			eventBuilder.setEventSubtype(EventSubtype.BADGES);
 		else
-			eventBuilder.setEventSubType(EventSubType.MARKET_REPORT);
+			eventBuilder.setEventSubtype(EventSubtype.MARKET_REPORT);
 		//Condition
 		if(condition.equals("CPO"))
 			eventBuilder.setCondition(Condition.CPO);
 		else if(condition.equals("New"))
-			eventBuilder.setCondition(Condition.NEW);
+			eventBuilder.setCondition(Condition.New);
 		else
-			eventBuilder.setCondition(Condition.USED);
+			eventBuilder.setCondition(Condition.Used);
 		//BodyStyle
 		if(bodyStyle.equals("Chassis"))
 			eventBuilder.setBodyStyle(BodyStyle.Chassis);

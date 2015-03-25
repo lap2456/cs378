@@ -33,15 +33,16 @@ public class ComparableEvent implements Comparable<ComparableEvent> {
 	@Override
 	public int compareTo(ComparableEvent o) {
 		ComparableEvent event = (ComparableEvent) o;
-
-		//If our stored event has a larger timestamp than the argument, return 1
-		//else, return -1
-		if (myEvent.getEventTime() > event.getMyEvent().getEventTime())
-			return 1;
-		else if (myEvent.getEventTime() < event.getMyEvent().getEventTime())
+		String[] first = myEvent.getEventTime().split(" ");
+		String[] second = event.getMyEvent().getEventTime().split(" ");
+		if(first[0].compareTo(second[0]) == -1){
 			return -1;
-		else 
-			return 0;
-
+		}
+		else if(first[0].compareTo(second[0] == 1)){
+			return 1;
+		}
+		else{
+			return first[1].compareTo(second[1]);
+		}
 	}
 }

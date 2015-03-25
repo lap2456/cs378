@@ -79,7 +79,7 @@ AvroKey<Pair<CharSequence, Session>>, NullWritable> {
 		//Event objects with comparable interface
 		List<ComparableEvent> sortedEventList = new ArrayList<ComparableEvent>();
 		for (int i = 0 ; i < eventist.size() ; i++){
-			ComparableEvent sortedSession = new ComparableEvent(eventist.get(i));
+			ComparableEvent sortedEvent = new ComparableEvent(eventist.get(i));
 			sortedEventList.add(sortedEvent);
 		}
 
