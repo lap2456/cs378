@@ -73,14 +73,12 @@ AvroKey<Pair<CharSequence, Session>>, NullWritable> {
 				new AvroKey<Pair<CharSequence, Session>>
 				(new Pair<CharSequence, Session>(key.toString(), finalSession.build())),
 				NullWritable.get());
-				*/
 	}
 
 
 	//This method takes an unsorted list of Events and sorts them based on their
 	//timestamp information
 	private List<Event> getSortedSessionList(List<Event> eventist) {
-
 		//Create a list of ComparableEvent which wrap
 		//Event objects with comparable interface
 		List<ComparableEvent> sortedEventList = new ArrayList<ComparableEvent>();
