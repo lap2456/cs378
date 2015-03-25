@@ -41,10 +41,10 @@ public class ComparableEvent implements Comparable<ComparableEvent> {
 		String firstTime = myTimeStamp.substring(firstDate.length(), myTimeStamp.length());
 		String secondTime = theirTimeStamp.substring(secondDate.length(), theirTimeStamp.length());
 
-		if(firstDate.compareTo(secondDate) == -1){
+		if(firstDate.compareTo(secondDate) < 0){
 			return -1;
 		}
-		else if(firstDate.compareTo(secondDate) == 1){
+		else if(firstDate.compareTo(secondDate) > 0){
 			return 1;
 		}
 		else{
