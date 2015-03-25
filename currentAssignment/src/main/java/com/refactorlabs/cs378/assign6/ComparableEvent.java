@@ -1,5 +1,7 @@
 package com.refactorlabs.cs378.assign6;
 
+import java.lang.String;
+
 /*
  * @author Louis Pujol
  * 
@@ -38,7 +40,7 @@ public class ComparableEvent implements Comparable<ComparableEvent> {
 		if(first[0].compareTo(second[0]) == -1){
 			return -1;
 		}
-		else if(first[0].compareTo(second[0] == 1)){
+		else if(first[0].compareTo(second[0]) == 1)){
 			return 1;
 		}
 		else{

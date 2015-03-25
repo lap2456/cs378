@@ -109,7 +109,13 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		eventBuilder.setFreeCarfaxReport(initialCarfaxFreeReport == "t" ? true : false);
 		eventBuilder.setCarfaxOneOwner(carfaxOneOwner == "t" ? true : false);
 		eventBuilder.setCpo(initialCPO == "t" ? true : false);
-		eventBuilder.setFeatures(features.split(":"));
+
+		List<String> featuresList = new List<String>();
+		String[] featuresSet = features.split(":");
+		for(int i=0; i<featuresSet.length; ++i){
+			featuresList.add(featuresSet[i]);
+		}
+		eventBuilder.setFeatures(featuresList);
 		//////////////////////////////////////////////////////////
 		
 		//////////////////////////////////////////////////////////
