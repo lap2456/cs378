@@ -1,101 +1,90 @@
-{"namespace": "com.refactorlabs.cs378.assign6",
-"type": "record",
-"name": "Session",
-"fields": [
-	{"name": "api_key", "type": ["string", "null"], "default": "null" },
-	{"name": "user_agent", "type": ["string", "null"], "default": "null" },
-	{"name": "resolution", "type": ["string", "null"], "default": "null" },
-	// Add additional session fields here
-	{
-	"name": "activex", 
-	"type": 
-		{
-			"type": "enum",
-			"name": "ActiveX",
-			"symbols": [ "ENABLED", "NOT_SUPPORTED" ],
-			"default": "NOT_SUPPORTED"
-		},
-	"default": "NOT_SUPPORTED"
-	},
-	{
-	"name": "impressions", 
-	"type": 
-		{
-		"type": "array", "items": 
-			{
-			"type": "record",
-			"name": "Impression",
-			"fields": 
-				[{
-				"name": "impression_type",
-				"type": 
-					{
-					"type": "enum",
-					"name": "ImpressionType",
-					"symbols": [ "ACTION", "VDP", "SRP" ],
-					"default": "SRP"
-					},
-		 		"default": "SRP"
-				},
-				{
-				"name": "action",
-				"type": 
-					{
-					"type": "enum", "name": "Action",
-					"symbols": [ "CLICK", "PAGE_VIEW" ],
-					"default": "PAGE_VIEW"
-					},
-				"default": "PAGE_VIEW"
-				},
-				{
-				"name": "action_name",
-				"type": 
-					{
-					"type": "enum", "name": "ActionName",
-					"symbols": [ "DEALER_PAGE_VIEWED", "VIEWED_CARFAX_REPORT", "VIEWED_CARFAX_REPORT_UNHOSTED", "MORE_PHOTOS_VIEWED", "DEALER_WEBSITE_VIEWED", "NONE" ],
-					"default": "NONE"
-					},
-				"default": "NONE"
-				},
-				{
-				"name": "id",
-				"type": 
-					{
-					"type": "array", "items": 
-						{
-						"name": "id",
-						"type": "long"
-						}
-					}
-				},
-				{"name": "ab", "type": ["string", "null"], "default": "null" },
-				{"name": "vertical", "type": 
-					{
-					"type": "enum", "name": "Vertical",
-					"symbols": [ "CARS", "NONE" ],
-					"default": "NONE"
-					},
-				"default": "NONE"
-				},
-				{"name": "start_index", "type": ["int","null"], "default": 0 },
-				{"name": "total", "type": ["int","null"], "default": 0 },
-				{"name": "domain", "type":["string", "null"], "default": "null" },
-				{"name": "lat", "type": ["double","null"], "default": 0.0 },
-				{"name": "lon", "type": ["double", "null"], "default": 0.0 },
-				{"name": "address", "type": ["string", "null"], "default": "null" },
-				{"name": "city", "type": ["string", "null"], "default": "null" },
-				{"name": "zip", "type": ["string", "null"], "default": "null" },
-				{"name": "state", "type": ["string", "null"], "default": "null" },
-				// Add additional impression fields here
-				{"name": "phone_type", "type": 
-					{
-					"type": "enum", "name": "PhoneType",
-					"symbols": [ "TRACKED", "NONE" ],
-					"default": "NONE"
-					},
-				"default": "NONE"
-				}]
-			}
-		}
-	}
-]}
+{"namespace": "com.refactorlabs.cs378.sessions",
+ "type": "record",
+ "name": "Session",
+ "fields": [
+      {"name": "user_id", "type": "string"},
+      {"name": "events",
+       "type": {"type": "array",
+                "items": {"type": "record",
+                          "name": "Event",
+                          "fields": [
+                              {"name": "event_type",
+                               "type": {"type": "enum",
+                                        "name": "EventType",
+                                        "symbols": [ "CHANGE", "CLICK", "CONTACT_FORM_STATUS",
+                                                     "EDIT", "SHARE", "SHOW", "SUBMIT", "VISIT" ]
+                                       }
+                               },
+                              {"name": "event_subtype",
+                               "type": {"type": "enum", "name": "EventSubtype",
+                                        "symbols": [ // CHANGE subtypes
+                                                        "CONTACT_FORM_TYPE",
+                                                     // CLICK subtypes
+                                                        "ALTERNATIVE", "CONTACT_BANNER", "CONTACT_BUTTON",
+                                                        "DEALER_PHONE", "FEATURES", "GET_DIRECTIONS",
+                                                        "SHOW_MORE_BADGES", "TEST_DRIVE_LINK", "VEHICLE_HISTORY",
+                                                     // CONTACT subtypes
+                                                        "FORM_ERROR", "FORM_SUCCESS",
+                                                     // EDIT, SUBMIT subtypes
+                                                        "CONTACT_FORM",
+                                                     // SHARE subtypes
+                                                        "MARKET_REPORT",
+                                                     // SHOW subtypes
+                                                        "BADGE_DETAIL", "PHOTO_MODAL",
+                                                     // VISIT subtypes
+                                                        "BADGES"
+                                                        // also: "ALTERNATIVE", "CONTACT_FORM", "FEATURES"
+                                                        //       "VEHICLE_HISTORY", "MARKET_REPORT"
+                                                     ]
+                                       }    // ,"default": "MARKET_REPORT"
+                              },
+                              {"name": "event_time", "type": "string" },
+                              {"name": "page", "type": "string" },
+                              {"name": "referrer", "type": [ "null", "string"], "default": null },
+                              {"name": "referring_domain", "type": [ "null", "string"], "default": null },
+                              {"name": "city", "type": [ "null", "string"], "default": null },
+                              {"name": "region", "type": [ "null", "string"], "default": null },
+                              {"name": "vin", "type": [ "null", "string"], "default": null },
+                              {"name": "condition", "type": {"type": "enum", "name": "Condition",
+                                                             "symbols": [ "New", "Used", "CPO" ] },
+                                                    "default": "Used"},
+                              {"name": "year", "type": [ "null", "int" ], "default": null },
+                              {"name": "make", "type": "string" },
+                              {"name": "model", "type": "string" },
+                              {"name": "trim", "type": [ "null", "string"], "default": null },
+                              {"name": "body_style", "type": [ "null",
+                                                               {"type": "enum", "name": "BodyStyle",
+                                                                "symbols": [ "Chassis", "Convertible", "Coupe",
+                                                                             "Hatchback", "Minivan", "Pickup",
+                                                                             "SUV", "Sedan", "Van", "Wagon" ]
+                                                               } ],
+                                                     "default": null },
+                              {"name": "subtrim", "type": [ "null", "string"], "default": null },
+                              {"name": "cab_style", "type": [ "null",
+                                                              {"type": "enum", "name": "CabStyle",
+                                                               "symbols": [ "Regular", "Extended", "Crew"]
+                                                              } ],
+                                                    "default": null },
+                              {"name": "price", "type": [ "null", "float" ], "default": null },
+                              {"name": "mileage", "type": [ "null", "int" ], "default": null },
+                              {"name": "mpg", "type": [ "null", "int" ], "default": null },
+                              {"name": "exterior_color", "type": [ "null", "string"], "default": null },
+                              {"name": "interior_color", "type": [ "null", "string"], "default": null },
+                              {"name": "engine_displacement", "type": [ "null", "string"], "default": null },
+                              {"name": "engine", "type": [ "null", "string"], "default": null },
+                              {"name": "transmission", "type": [ "null", "string"], "default": null },
+                              {"name": "drive_type", "type": [ "null", "string"], "default": null },
+                              {"name": "fuel", "type": [ "null", "string"], "default": null },
+                              {"name": "image_count", "type": "int", "default": 0 },
+                              {"name": "free_carfax_report", "type": "boolean", "default": false },
+                              {"name": "carfax_one_owner", "type": "boolean", "default": false },
+                              {"name": "cpo", "type": "boolean", "default": false },
+                              {"name": "features", "type": {"type": "array", "items": "string" }}
+
+                            ]
+                          }
+                }
+       }
+   ]
+ }
+
