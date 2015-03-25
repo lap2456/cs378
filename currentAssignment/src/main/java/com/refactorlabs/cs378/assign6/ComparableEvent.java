@@ -1,7 +1,5 @@
 package com.refactorlabs.cs378.assign6;
 
-import java.lang.String;
-
 /*
  * @author Louis Pujol
  * 
@@ -35,16 +33,22 @@ public class ComparableEvent implements Comparable<ComparableEvent> {
 	@Override
 	public int compareTo(ComparableEvent o) {
 		ComparableEvent event = (ComparableEvent) o;
-		String[] first = myEvent.getEventTime().split(" ");
-		String[] second = event.getMyEvent().getEventTime().split(" ");
-		if(first[0].compareTo(second[0]) == -1){
+		String myTimeStamp = myEvent.getEventTime();
+		String theirTimeStamp = event.getMyEvent().getEventTime();
+		
+		String firstDate = myTimeStamp.substring(0, myTimeStamp.indexOf(" "));
+		String secondDate = theirTimeStamp.substring(0, theirTimeStamp.indexOf(" "));
+		String firstTime = myTimeStamp.substring(firstDate.length(), myTimeStamp.length());
+		String secondTime = theirTimeStamp.substring(secondDate.length(), theirTimeStamp.length());
+
+		if(firstDate.compareTo(secondDate) == -1){
 			return -1;
 		}
-		else if(first[0].compareTo(second[0]) == 1){
+		else if(firstDate.compareTo(secondDate) == 1){
 			return 1;
 		}
 		else{
-			return first[1].compareTo(second[1]);
+			return firstTime.compareTo(secondTime);
 		}
 	}
 }
