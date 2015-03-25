@@ -44,10 +44,6 @@ AvroKey<Pair<CharSequence, Session>>, NullWritable> {
 
 			//Save all of our session data using the first session object
 			if (firstIteration){
-				finalSession.setActivex(value.datum().getActivex());
-				finalSession.setApiKey(value.datum().getApiKey());
-				finalSession.setResolution(value.datum().getResolution());
-				finalSession.setUserAgent(value.datum().getUserAgent());
 				finalSession.setUserId(value.datum().getUserId());
 				firstIteration = false;
 			}
@@ -78,7 +74,7 @@ AvroKey<Pair<CharSequence, Session>>, NullWritable> {
 
 	//This method takes an unsorted list of Events and sorts them based on their
 	//timestamp information
-	private List<Event> getSortedSessionList(List<Event> eventist) {
+	private List<Event> getSortedEventList(List<Event> eventist) {
 		//Create a list of ComparableEvent which wrap
 		//Event objects with comparable interface
 		List<ComparableEvent> sortedEventList = new ArrayList<ComparableEvent>();

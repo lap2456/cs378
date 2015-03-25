@@ -41,96 +41,177 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 
 		//////////////////////////////////////////////////////////
 		//Initialize all of our avro fields
-		String eventType = getFieldValue("|type:", line).toUpperCase();
-		String address = getFieldValue("address:", line);
-		String city = getFieldValue("city:", line);
-		String zip = getFieldValue("zip:", line);
-		String state = getFieldValue("state:", line);
-		String lat = getFieldValue("lat:", line);
-		String total = getFieldValue("total:", line);
-		String startIndex = getFieldValue("start_index:", line);
-		String idnumbers = getFieldValue("|id:", line);
-		idnumbers = idnumbers.replaceAll(",", " ");
-		String ab = getFieldValue("ab:", line);
-		String actionName = getFieldValue("action_name:", line).toUpperCase();
-		String resolution = getFieldValue("res:", line);
-		String uagent = getFieldValue("uagent:", line);
-		String apikey = getFieldValue("apikey:", line);
-		String uid= getFieldValue("uid:", line);
-		String domain = getFieldValue("domain:", line);
-		String lon = getFieldValue("lon:", line);
+		String userId= getFieldValue(0, line);
+		String fullEventType = getFieldValue(1, line).toUpperCase();
+		String page = getFieldValue(2, line);
+		String referrer = getFieldValue(3, line);
+		String referringDomain = getFieldValue(4, line);
+		String eventTimeStamp = getFieldValue(5, line);
+		String city = getFieldValue(6, line);
+		String region = getFieldValue(7, line);
+		String vin = getFieldValue(8, line);
+		String condition = getFieldValue(9, line);
+		String year = getFieldValue(10, line);
+		String make = getFieldValue(11, line);
+		String model = getFieldValue(12, line);
+		String trim = getFieldValue(13, line);
+		String bodyStyle = getFieldValue(14, line);
+		String subtrim = getFieldValue(15, line);
+		String cabStyle = getFieldValue(16, line);
+		String initialPrice = getFieldValue(17, line);
+		String mileage = getFieldValue(18, line);
+		String mpg = getFieldValue(19, line);
+		String exteriorColor = getFieldValue(20, line);
+		String interiorColor = getFieldValue(21, line);
+		String engineDisplacement = getFieldValue(22, line);
+		String engine = getFieldValue(23, line);
+		String transmission = getFieldValue(24, line);
+		String driveType = getFieldValue(25, line);
+		String fuel = getFieldValue(26, line);
+		String imageCount = getFieldValue(27, line);
+		String initialCarfaxFreeReport = getFieldValue(28, line);
+		String carfaxOneOwner = getFieldValue(29, line);
+		String initialCPO = getFieldValue(30, line);
+		String features = getFieldValue(31, line);
+
 		//////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////
 		//Set all of our non-enumerated session field values
-		sessionBuilder.setApiKey(getValidatedFieldValue(apikey));
-		sessionBuilder.setUserId(getValidatedFieldValue(uid));
-		sessionBuilder.setResolution(getValidatedFieldValue(resolution));
-		sessionBuilder.setUserAgent(getValidatedFieldValue(uagent));
+		sessionBuilder.setUserId(userId);
 		//////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////
 		//Set all of our event field values
-		eventBuilder.setAb(getValidatedFieldValue(ab));
-		eventBuilder.setLon(parseValidDouble(lon));
-		eventBuilder.setLat(parseValidDouble(lat));
-		eventBuilder.setAddress(getValidatedFieldValue(address));
-		eventBuilder.setCity(getValidatedFieldValue(city));
-		eventBuilder.setZip(getValidatedFieldValue(zip));
-		eventBuilder.setState(getValidatedFieldValue(state));
-		eventBuilder.setId(getIdList(idnumbers));
-		eventBuilder.setStartIndex(parseValidInt(startIndex));
-		eventBuilder.setTotal(parseValidInt(total));
-		eventBuilder.setDomain(getValidatedFieldValue(domain));
+		eventBuilder.setEventTime(eventTimeStamp);
+		eventBuilder.setPage(page);
+		eventBuilder.setReferrer(referrer == "null" ? null : referrer);
+		eventBuilder.setReferringDomain(referringDomain == "null" ? null : referringDomain);
+		eventBuilder.setCity(city == "null" ? null : city);
+		eventBuilder.setRegion(region == "null" ? null : region);
+		eventBuilder.setVin(vin == "null" ? null : vin);
+		eventBuilder.setYear(Integer.parseInt(year));
+		eventBuilder.setMake(make);
+		eventBuilder.setModel(model);
+		eventBuilder.setTrim(trim == "" ? null : trim);
+		eventBuilder.setSubtrim(subtrim);
+		eventBuilder.setPrice(price == "0.0000" ? null : Float.parseFloat(price));
+		eventBuilder.setMileage(Integer.parseInt(mileage));
+		eventBuilder.setMpg(Integer.parseInt(mpg));
+		eventBuilder.setExteriorColor(exteriorColor == "null" ? null : exteriorColor);
+		eventBuilder.setInteriorColor(interiorColor == "null" ? null : interiorColor);
+		eventBuilder.setEngineDisplacement(engineDisplacement == "null" ? null : engineDisplacement);
+		eventBuilder.setEngine(engine == "null" ? null : engine);
+		eventBuilder.setTransmission(transmission == "null" ? null : transmission);
+		eventBuilder.setDriveType(driveType == "null" ? null : driveType);
+		eventBuilder.setFuel(fuel == "null" ? null : fuel);
+		eventBuilder.setImageCount(imageCount == "0" ? null : Integer.parseInt(imageCount));
+		eventBuilder.setFreeCarfaxReport(initialCarfaxFreeReport == "t" ? true : false);
+		eventBuilder.setCarfaxOneOwner(carfaxOneOwner == "t" ? true : false);
+		eventBuilder.setCpo(initialCPO == "t" ? true : false);
+		eventBuilder.setFeatures(features.split[":"]);
 		//////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////
-		//Set all of our session field values that are enumerated
-		//Simply check to see if string exists in the input text
-		//And enumeration based on string
-		if (line.contains("activex:enabled"))
-			sessionBuilder.setActivex(ActiveX.ENABLED);
-		else
-			sessionBuilder.setActivex(ActiveX.NOT_SUPPORTED);
-		//////////////////////////////////////////////////////////
-
+		
 		//////////////////////////////////////////////////////////
 		//Set all of our event field values that are enumerated
 		//Simply check to see if string exists in the input text
 		//And set enumerations based on string
-		if (line.contains("action:"))
-			eventBuilder.setAction(Action.CLICK);
+		//EventType
+		if (fullEventType.startsWith("CHANGE"))
+			eventBuilder.setEventType(EventType.CHANGE);
+		else if (fullEventType.startsWith("CLICK"))
+			eventBuilder.setEventType(EventType.CLICK);
+		else if (fullEventType.startsWith("CONTACT FORM"))
+			eventBuilder.setEventType(EventType.CONTACT);
+		else if (fullEventType.startsWith("EDIT"))
+			eventBuilder.setEventType(EventType.EDIT);
+		else if (fullEventType.startsWith("SHARE"))
+			eventBuilder.setEventType(EventType.SHARE);
+		else if (fullEventType.startsWith("SHOW"))
+			eventBuilder.setEventType(EventType.SHOW);
+		else if (fullEventType.startsWith("SUBMIT"))
+			eventBuilder.setEventType(EventType.SUBMIT);
 		else
-			eventBuilder.setAction(Action.PAGE_VIEW);
-		if (actionName.contains("PAGE"))
-			eventBuilder.setActionName(ActionName.DEALER_PAGE_VIEWED);
-		else if (actionName.contains("WEBSITE"))
-			eventBuilder.setActionName(ActionName.DEALER_WEBSITE_VIEWED);
-		else if (actionName.contains("UNHOSTED"))
-			eventBuilder.setActionName(ActionName.VIEWED_CARFAX_REPORT_UNHOSTED);
-		else if (actionName.contains("CARFAX"))
-			eventBuilder.setActionName(ActionName.VIEWED_CARFAX_REPORT);
-		else if (actionName.contains("MORE"))
-			eventBuilder.setActionName(ActionName.MORE_PHOTOS_VIEWED);
+			eventBuilder.setEventType(EventType.VISIT);
+		//EventSubType
+		if (fullEventType.endsWith("CONTACT FORM TYPE"))
+			eventBuilder.setEventSubType(EventSubType.CONTACT_FORM_TYPE);
+		else if(fullEventType.endsWith("ALTERNATIVES"))
+			eventBuilder.setEventSubType(EventSubType.ALTERNATIVE);
+		else if(fullEventType.endsWith("CONTACT BANNER"))
+			eventBuilder.setEventSubType(EventSubType.CONTACT_BANNER);
+		else if(fullEventType.endsWith("CONTACT BUTTON"))
+			eventBuilder.setEventSubType(EventSubType.CONTACT_BUTTON);
+		else if(fullEventType.endsWith("DEALER PHONE"))
+			eventBuilder.setEventSubType(EventSubType.DEALER_PHONE);
+		else if(fullEventType.endsWith("FEATURES"))
+			eventBuilder.setEventSubType(EventSubType.FEATURES);
+		else if(fullEventType.endsWith("GET DIRECTIONS"))
+			eventBuilder.setEventSubType(EventSubType.GET_DIRECTIONS);
+		else if(fullEventType.endsWith("SHOW MORE BADGES"))
+			eventBuilder.setEventSubType(EventSubType.SHOW_MORE_BADGES);
+		else if(fullEventType.endsWith("TEST DRIVE LINK"))
+			eventBuilder.setEventSubType(EventSubType.TEST_DRIVE_LINK);
+		else if(fullEventType.endsWith("VEHICLE HISTORY REPORT LINK"))
+			eventBuilder.setEventSubType(EventSubType.VEHICLE_HISTORY);
+		else if(fullEventType.endsWith("FORM ERROR"))
+			eventBuilder.setEventSubType(EventSubType.FORM_ERROR);
+		else if(fullEventType.endsWith("FORM SUCCESS"))
+			eventBuilder.setEventSubType(EventSubType.FORM_SUCCESS);
+		else if(fullEventType.endsWith("CONTACT FORM"))
+			eventBuilder.setEventSubType(EventSubType.CONTACT_FORM);
+		else if(fullEventType.endsWith("BADGE DETAIL"))
+			eventBuilder.setEventSubType(EventSubType.BADGE_DETAIL);
+		else if(fullEventType.endsWith("PHOTO MODAL"))
+			eventBuilder.setEventSubType(EventSubType.PHOTO_MODAL);
+		else if(fullEventType.endsWith("BADGES"))
+			eventBuilder.setEventSubType(EventSubType.BADGES);
 		else
-			eventBuilder.setActionName(ActionName.NONE);
-		if (getFieldValue("vertical:", line).toUpperCase().equals("CARS"))
-			eventBuilder.setVertical(Vertical.CARS);	
-		if (eventType.length() == 0)
-			eventBuilder.setEventType(EventType.SRP);
-		else if (eventType.contains("ACTION"))
-			eventBuilder.setEventType(EventType.ACTION);
+			eventBuilder.setEventSubType(EventSubType.MARKET_REPORT);
+		//Condition
+		if(condition.equals("CPO"))
+			eventBuilder.setCondition(Condition.CPO);
+		else if(condition.equals("New"))
+			eventBuilder.setCondition(Condition.NEW);
 		else
-			eventBuilder.setEventType(EventType.VDP);
-
-		if (line.contains("phone_type:tracked"))
-			eventBuilder.setPhoneType(PhoneType.TRACKED);
+			eventBuilder.setCondition(Condition.USED);
+		//BodyStyle
+		if(bodyStyle.equals("Chassis"))
+			eventBuilder.setBodyStyle(BodyStyle.Chassis);
+		else if(bodyStyle.equals("Convertible"))
+			eventBuilder.setBodyStyle(BodyStyle.Convertible);
+		else if(bodyStyle.equals("Coupe"))
+			eventBuilder.setBodyStyle(BodyStyle.Coupe);
+		else if(bodyStyle.equals("Hatchback"))
+			eventBuilder.setBodyStyle(BodyStyle.Hatchback);
+		else if(bodyStyle.equals("Minivan"))
+			eventBuilder.setBodyStyle(BodyStyle.Minivan);
+		else if(bodyStyle.equals("Pickup"))
+			eventBuilder.setBodyStyle(BodyStyle.Pickup);
+		else if(bodyStyle.equals("SUV"))
+			eventBuilder.setBodyStyle(BodyStyle.SUV);
+		else if(bodyStyle.equals("Sedan"))
+			eventBuilder.setBodyStyle(BodyStyle.Sedan);
+		else if(bodyStyle.equals("Van"))
+			eventBuilder.setBodyStyle(BodyStyle.Van);
+		else if(bodyStyle.equals("Wagon"))
+			eventBuilder.setBodyStyle(BodyStyle.Wagon);
+		else
+			eventBuilder.setBodyStyle(null);
+		//CabStyle
+		if(cabStyle.equals("Regular Cab"))
+			eventBuilder.setCabStyle(CabStyle.Regular);
+		else if(cabStyle.equals("Extended Cab"))
+			eventBuilder.setCabStyle(CabStyle.Extended);
+		else if(cabStyle.equals("Crew Cab"))
+			eventBuilder.setCabStyle(CabStyle.Crew);
+		else
+			eventBuilder.setCabStyle(null);
 		//////////////////////////////////////////////////////////
 
 
-		//Set our output key using concatenated uid and apikey
-		word.set(uid+":"+apikey);
-
+		//Set our output key using userId
+		word.set(userId);
 
 		//Create eventList out of our event and store in the session
 		List<Event> eventList = new ArrayList<Event>();
@@ -139,90 +220,10 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 
 		//Write key and session (wrapped in avro value) to context
 		context.write( word, new AvroValue<Session>(sessionBuilder.build()));
-
 	}
 
-	//Parse valid double and return 0.0 if invalid
-	private Double parseValidDouble(String key){
-		if (getValidatedFieldValue(key) != null)
-			return Double.parseDouble(key);
-		else
-			return 0.0;
-	}
-
-	//Parse valid long and return 0 if invalid
-	private Long parseValidLong(String key){
-		if (getValidatedFieldValue(key) != null)
-			return Long.parseLong(key);
-		else
-			return (long)0;
-	}
-
-	//Parse valid integer and return 0 if invalid
-	private Integer parseValidInt(String key) {
-		if (getValidatedFieldValue(key) != null)
-			return Integer.parseInt(key);
-		else
-			return 0;
-	}
-
-	//Takes a string of idnumbers and parses into a Long type ArrayList of Id's
-	private List<Long> getIdList(String idnumbers) {
-		//Tokenizer for the idnumbers
-		StringTokenizer tokenizer = new StringTokenizer(idnumbers);
-		List<Long> idList = new ArrayList<Long>(); //Stores our list of Id's
-		while (tokenizer.hasMoreTokens()) {
-			String token = tokenizer.nextToken();
-			long temp = Long.parseLong(token); //Parse the current token
-			idList.add(temp); //Store to list
-		}
-		return idList;
-	}
-
-	//Validates a field value and determines if
-	private String getValidatedFieldValue(String fieldValue){
-		//If the length of the field value is 0, it must be invalid
-		//If the field value contains the object object value, it should be null
-		if (fieldValue.length() > 0 && !(fieldValue.toUpperCase().contains("[OBJECT OBJECT]")))
-			return fieldValue;
-		else
-			return null;
-	}
-
-	//Get the value of the field passed in as the fieldKey
-	//Uses the line (input) to find the value
-	private String getFieldValue(String fieldKey, String line){
-		String result = "";
-
-		//Find position occurrence of the fieldKey
-		int index = line.indexOf(fieldKey);
-
-		//Grab the initial offset 
-		int offset  = fieldKey.length();
-
-		//Store size of line
-		int sizeOfLine = line.length();
-
-		//Iterate through the line until we break
-		System.out.println("entering while loop");
-		while(true){
-
-			//If the index is -1, the fieldKey did not appear
-			//If the index+offset > size of line, we have reached end of file
-			if (index == -1  || (index+offset > sizeOfLine-1))  break;
-
-			//If the current character is '|', we have reached the 
-			//end of that field value
-			if (line.charAt(index+offset) == '|') break;
-
-			//Once we get here, we can safely add our current char to result
-			result += line.charAt(index + offset);
-
-			//Increment our offset
-			offset++;
-		}
-		System.out.println("broke while loop");
-		//Return final field value
-		return result;
+	//Find a field based on how many tabs are before it
+	private String getFieldValue(int index, String line){
+		return line.split("\t")[index];
 	}
 }
