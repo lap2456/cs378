@@ -29,7 +29,7 @@ AvroKey<Pair<CharSequence, Session>>, NullWritable> {
 	@Override
 	public void reduce(Text key, Iterable<AvroValue<Session>> values, Context context)
 			throws IOException, InterruptedException {
-
+/*
 		//finalSession stores our output session
 		Session.Builder finalSession = Session.newBuilder();
 
@@ -74,12 +74,13 @@ AvroKey<Pair<CharSequence, Session>>, NullWritable> {
 				new AvroKey<Pair<CharSequence, Session>>
 				(new Pair<CharSequence, Session>(key.toString(), finalSession.build())),
 				NullWritable.get());
+				*/
 	}
 
-
+/*
 	//This method takes an unsorted list of Impressions and sorts them based on their
 	//timestamp information
-	private List<Impression> getSortedImpressionList(List<Impression> impList) {
+	private List<Event> getSortedSessionList(List<Event> impList) {
 
 		//Create a list of ComparableEvent which wrap
 		//Impression objects with comparable interface
@@ -100,5 +101,5 @@ AvroKey<Pair<CharSequence, Session>>, NullWritable> {
 
 		//Return sorted Impression list
 		return finalImpList;
-	}
+	}*/
 }

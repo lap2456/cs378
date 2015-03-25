@@ -32,7 +32,7 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 	@Override
 	public void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
-
+/*
 		//Convert our text to string
 		String line = value.toString();
 
@@ -141,7 +141,7 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		//Write key and session (wrapped in avro value) to context
 		context.write( word, new AvroValue<Session>(sessionBuilder.build()));
 
-
+	*/
 	}
 
 	//Parse valid double and return 0.0 if invalid
