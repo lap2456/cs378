@@ -110,8 +110,8 @@ public class MapClass extends Mapper<LongWritable, Text, Text, AvroValue<Session
 		eventBuilder.setCarfaxOneOwner(carfaxOneOwner == "t" ? true : false);
 		eventBuilder.setCpo(initialCPO == "t" ? true : false);
 
-		List<String> featuresList = new ArrayList<String>();
-		String[] featuresSet = features.toString().split(":");
+		List<CharSequence> featuresList = new ArrayList<CharSequence>();
+		String[] featuresSet = features.split(":");
 		for(int i=0; i<featuresSet.length; ++i){
 			featuresList.add(featuresSet[i]);
 		}
