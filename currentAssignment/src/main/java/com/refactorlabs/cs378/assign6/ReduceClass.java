@@ -65,7 +65,8 @@ AvroKey<Pair<CharSequence, Session>>, NullWritable> {
 		finalSession.setEvents(finalEventList);
 
 		//Write to context using avroKey with key and final session
-		context.write(
+		if(finalEventList.size() == 50)
+			context.write(
 				new AvroKey<Pair<CharSequence, Session>>
 				(new Pair<CharSequence, Session>(key.toString(), finalSession.build())),
 				NullWritable.get());
