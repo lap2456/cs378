@@ -21,6 +21,7 @@ import org.apache.hadoop.mapreduce.Mapper;
  */
 public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Session>, Text, AvroValue<VinImpressionCounts>> {
 
+	private Text word = new Text();
 
 	@Override
 	public void map(AvroKey<CharSequence> key, AvroValue<Session> value, Context context)

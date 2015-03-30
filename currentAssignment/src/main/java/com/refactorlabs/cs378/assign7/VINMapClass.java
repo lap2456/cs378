@@ -21,15 +21,23 @@ import org.apache.hadoop.mapreduce.Mapper;
  */
 public class VINMapClass extends Mapper<LongWritable, Text, Text, AvroValue<VinImpressionCounts>> {
 
+	private Text word = new Text();
+
 	@Override
 	public void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
 		//Convert our text to string
+
 		String line = value.toString();
 		VinImpressionCounts.Builder vinBuilder = new VinImpressionCounts.Builder();
+		String[] values = line.split(',');
+		java.lang.Long vin = Long.parseLong(values[0]);
+		java.lang.Long unique_users = Long.parseLong(values[2]);
 
+		vinBuilder.setUniqueUser(unique_users);
+		word.set(vin);
 
 		//Write key and session (wrapped in avro value) to context
-		//context.write( word, new AvroValue<VinImpressionCounts>(vinBuilder.build()));
+		context.write( word, new AvroValue<VinImpressionCounts>(vinBuilder.build()));
 	}
 }
