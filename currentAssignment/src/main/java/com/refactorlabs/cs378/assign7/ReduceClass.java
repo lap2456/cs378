@@ -26,7 +26,7 @@ extends Reducer<Text, AvroValue<VinImpressionCounts>,
 Text, AvroValue<VinImpressionCounts>> {
 
 	@Override
-	public void reduce(Text key, AvroValue<VinImpressionCounts> values, Context context)
+	public void reduce(Text key, Iterable<AvroValue<VinImpressionCounts>> values, Context context)
 			throws IOException, InterruptedException {
 		
 		VinImpressionCounts.Builder finalVinImpression = VinImpressionCounts.newBuilder();

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import org.apache.avro.mapred.AvroKey;
@@ -27,7 +28,7 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 			throws IOException, InterruptedException {
 
 		List<Event> events = value.getEvents();
-		Map<String, VinImpressionCounts.Builder> vinToCounts = new Map<String, VinImpressionCounts>();
+		Map<String, VinImpressionCounts.Builder> vinToCounts = new HashMap<String, VinImpressionCounts>();
 		for(Event event : events){
 			String vin = String.valueOf(event.getVin());
 			VinImpressionCounts.Builder vinBuilder;
@@ -50,7 +51,7 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 					userToNum = vinBuilder.getClicks();
 				}
 				else{
-					userToNum = new Map<CharSequence, Long>();
+					userToNum = new HashMap<CharSequence, Long>();
 				}
 				if(userToNum.containsKey(key)){
 					userToNum.put(key, userToNum.get(key) + 1);

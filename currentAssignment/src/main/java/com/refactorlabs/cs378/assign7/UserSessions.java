@@ -56,7 +56,6 @@ public class UserSessions extends Configured implements Tool {
 		job.setMapperClass(SessionMapClass.class);
 		job.setMapOutputKeyClass(Text.class);
 		AvroJob.setMapOutputValueSchema(job, VinImpressionCounts.getClassSchema());
-
 		
 		// Specify the Reduce
 		job.setOutputFormatClass(TextOutputFormat.class);
