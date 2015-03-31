@@ -1,4 +1,4 @@
-package com.refactorlabs.cs378.assign6;
+package com.refactorlabs.cs378.assign7;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,10 +25,29 @@ public class ReduceClass
 extends Reducer<Text, AvroValue<VinImpressionCounts>,
 Text, AvroValue<VinImpressionCounts>> {
 
-
 	@Override
 	public void reduce(Text key, AvroValue<VinImpressionCounts> values, Context context)
 			throws IOException, InterruptedException {
 		
+		VinImpressionCounts.Builder finalVinImpression = VinImpressionCounts.newBuilder();
+
+		List<VinImpressionCounts> impList = new ArrayList<VinImpressionCounts>();
+
+		for (AvroValue<VinImpressionCounts> value : values){
+			if(value.hasUniqueUser())
+				finalVinImpression.setUniqueUser(value.getUniqueUser());
+			if(value.hasClicks())
+				finalVinImpression.setClicks(value.getClicks());
+			if(value.hasShareMarketReport())
+				finalVinImpression.setShareMarketReport(value.getShareMarketReport());
+			if(value.hasSubmitContactForm())
+				finalVinImpression.setSubmitContactForm(value.getSubmitContactForm());
+			if(value.hasUniqueUserVdpView())
+				finalVinImpression.setUniqueUserVdpView(value.getUniqueUserVdpView());
+		}
+		
+		if(finalVinImpression.hasUniqueUser())
+			context.write(key, new AvroValue<VinImpressionCounts>(finalVinImpression.build()));
+
 	}
 }

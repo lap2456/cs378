@@ -11,7 +11,6 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
@@ -28,7 +27,7 @@ import org.apache.hadoop.util.ToolRunner;
  *
  *
  */
-public class MultipleInputs extends Configured implements Tool {
+public class UserSessions extends Configured implements Tool {
 
 	
 	/**
@@ -37,12 +36,12 @@ public class MultipleInputs extends Configured implements Tool {
 	 */
 	public int run(String[] args) throws Exception {
 		if (args.length != 2) {
-			System.err.println("Usage: MultipleInputs <input path> <output path>");
+			System.err.println("Usage: UserSessions <input path> <output path>");
 			return -1;
 		}
 
 		Configuration conf = getConf();
-		Job job = new Job(conf, "MultipleInputs");
+		Job job = new Job(conf, "UserSessions");
 		String[] appArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 
 		// Identify the JAR file to replicate to all machines.
@@ -52,8 +51,8 @@ public class MultipleInputs extends Configured implements Tool {
 
 		// Specify the Map
 		job.setInputFormatClass(AvroKeyValueInputFormat.class);
-		AvroJob.setInputKeySchema(Schema.create(Schema.Type.STRING));
-		AvroJob.setInputValueSchema(Session.getClassSchema());
+		AvroJob.setInputKeySchema(job, Schema.create(Schema.Type.STRING));
+		AvroJob.setInputValueSchema(job, Session.getClassSchema());
 		job.setMapperClass(SessionMapClass.class);
 		job.setMapOutputKeyClass(Text.class);
 		AvroJob.setMapOutputValueSchema(job, VinImpressionCounts.getClassSchema());
@@ -63,7 +62,7 @@ public class MultipleInputs extends Configured implements Tool {
 		job.setOutputFormatClass(TextOutputFormat.class);
 		job.setReducerClass(ReduceClass.class);
 		job.setOutputKeyClass(Text.class);
-		AvroJob.setOutputValueSchema(VinImpressionCounts.getClassSchema());
+		AvroJob.setOutputValueSchema(job, VinImpressionCounts.getClassSchema());
 
 		//Process command line input and send to appropriate mapper 
 		//First input line is impression mapper, second is lead mapper
@@ -72,7 +71,7 @@ public class MultipleInputs extends Configured implements Tool {
 		  String inputPath = inputPaths[i];
 		  MultipleInputs.addInputPath(job, new Path(inputPath), TextInputFormat.class, SessionMapClass.class);
 		}
-		MultipleInputs.addInputPath(job, new Path(inputPaths[inputPaths.length - 1]), TestInputFormat.class, VINMapClass.class);
+		MultipleInputs.addInputPath(job, new Path(inputPaths[inputPaths.length - 1]), TextInputFormat.class, VinMapClass.class);
 
 		FileOutputFormat.setOutputPath(job, new Path(appArgs[1]));
 
