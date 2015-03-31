@@ -29,7 +29,7 @@ public class VinMapClass extends Mapper<LongWritable, Text, Text, AvroValue<VinI
 
 		String line = value.toString();
 		
-		VinImpressionCounts.Builder vinBuilder = new VinImpressionCounts.newBuilder();
+		VinImpressionCounts.Builder vinBuilder = VinImpressionCounts.newBuilder();
 		
 		String[] values = line.split(",");
 		Long unique_users = Long.parseLong(values[2]);
