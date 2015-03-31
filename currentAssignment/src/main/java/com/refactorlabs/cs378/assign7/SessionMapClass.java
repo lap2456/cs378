@@ -38,7 +38,7 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 			else{
 				vinBuilder = VinImpressionCounts.newBuilder();
 			}
-			vinBuilder.setUniqueUser(vinBuilder.getUniqueUser() + 1);
+			vinBuilder.setUniqueUser(vinBuilder.getUniqueUser() + 1L);
 			if(event.getEventType() == EventType.SHARE && event.getEventSubtype() == EventSubtype.MARKET_REPORT){
 				vinBuilder.setShareMarketReport(vinBuilder.getShareMarketReport() + 1);
 			}
@@ -54,10 +54,10 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 					userToNum = new HashMap<CharSequence, Long>();
 				}
 				if(userToNum.containsKey(key)){
-					userToNum.put(key, userToNum.get(key) + 1);
+					userToNum.put(key, userToNum.get(key) + 1L);
 				}
 				else{
-					userToNum.put(key, 1);
+					userToNum.put(key, 1L);
 				}
 				vinBuilder.setClicks(userToNum);
 			}
