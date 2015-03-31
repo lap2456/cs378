@@ -27,8 +27,9 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 	public void map(AvroKey<CharSequence> key, AvroValue<Session> value, Context context)
 			throws IOException, InterruptedException {
 
-		List<Event> events = value.getEvents();
-		Map<String, VinImpressionCounts.Builder> vinToCounts = new HashMap<String, VinImpressionCounts>();
+		CharSequence keyDatum = key.datum();
+		List<Event> events = value.datum().getEvents();
+		HashMap<String, VinImpressionCounts.Builder> vinToCounts = new HashMap<String, VinImpressionCounts>();
 		for(Event event : events){
 			String vin = String.valueOf(event.getVin());
 			VinImpressionCounts.Builder vinBuilder;
@@ -46,18 +47,18 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 				vinBuilder.setSubmitContactForm(vinBuilder.getSubmitContactForm() + 1);
 			}
 			else if(event.getEventType() == EventType.CLICK){
-				Map<CharSequence, Long> userToNum; 
+				HashMap<CharSequence, Long> userToNum; 
 				if(vinBuilder.hasClicks()){
 					userToNum = vinBuilder.getClicks();
 				}
 				else{
 					userToNum = new HashMap<CharSequence, Long>();
 				}
-				if(userToNum.containsKey(key)){
-					userToNum.put(key, userToNum.get(key) + 1L);
+				if(userToNum.containsKey(keyDatum)){
+					userToNum.put(keyDatum, userToNum.get(keyDatum) + 1L);
 				}
 				else{
-					userToNum.put(key, 1L);
+					userToNum.put(keyDatum, 1L);
 				}
 				vinBuilder.setClicks(userToNum);
 			}

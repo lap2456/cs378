@@ -34,16 +34,17 @@ Text, AvroValue<VinImpressionCounts>> {
 		List<VinImpressionCounts> impList = new ArrayList<VinImpressionCounts>();
 
 		for (AvroValue<VinImpressionCounts> value : values){
-			if(value.hasUniqueUser())
-				finalVinImpression.setUniqueUser(value.getUniqueUser());
-			if(value.hasClicks())
-				finalVinImpression.setClicks(value.getClicks());
-			if(value.hasShareMarketReport())
-				finalVinImpression.setShareMarketReport(value.getShareMarketReport());
-			if(value.hasSubmitContactForm())
-				finalVinImpression.setSubmitContactForm(value.getSubmitContactForm());
-			if(value.hasUniqueUserVdpView())
-				finalVinImpression.setUniqueUserVdpView(value.getUniqueUserVdpView());
+			VinImpressionCounts valueDatum = value.datum();
+			if(valueDatum.hasUniqueUser())
+				finalVinImpression.setUniqueUser(valueDatum.getUniqueUser());
+			if(valueDatum.hasClicks())
+				finalVinImpression.setClicks(valueDatum.getClicks());
+			if(valueDatum.hasShareMarketReport())
+				finalVinImpression.setShareMarketReport(valueDatum.getShareMarketReport());
+			if(valueDatum.hasSubmitContactForm())
+				finalVinImpression.setSubmitContactForm(valueDatum.getSubmitContactForm());
+			if(valueDatum.hasUniqueUserVdpView())
+				finalVinImpression.setUniqueUserVdpView(valueDatum.getUniqueUserVdpView());
 		}
 		
 		if(finalVinImpression.hasUniqueUser())
