@@ -29,7 +29,7 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 
 		CharSequence keyDatum = key.datum();
 		List<Event> events = value.datum().getEvents();
-		HashMap<String, VinImpressionCounts.Builder> vinToCounts = new HashMap<String, VinImpressionCounts>();
+		HashMap<String, VinImpressionCounts.Builder> vinToCounts = new HashMap<String, VinImpressionCounts.Builder>();
 		for(Event event : events){
 			String vin = String.valueOf(event.getVin());
 			VinImpressionCounts.Builder vinBuilder;
@@ -47,7 +47,7 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 				vinBuilder.setSubmitContactForm(vinBuilder.getSubmitContactForm() + 1);
 			}
 			else if(event.getEventType() == EventType.CLICK){
-				HashMap<CharSequence, Long> userToNum; 
+				Map<CharSequence, Long> userToNum; 
 				if(vinBuilder.hasClicks()){
 					userToNum = vinBuilder.getClicks();
 				}
