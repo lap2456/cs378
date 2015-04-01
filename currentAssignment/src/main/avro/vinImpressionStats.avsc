@@ -36,7 +36,7 @@
                                                         // also: "ALTERNATIVE", "CONTACT_FORM", "FEATURES"
                                                         //       "VEHICLE_HISTORY", "MARKET_REPORT"
                                                      ]
-                                       }     ,"default": "MARKET_REPORT"
+                                       }     //,"default": "MARKET_REPORT"
                               },
                               {"name": "event_time", "type": ["string", "null"], "default": null },
                               {"name": "page", "type": ["string", "null"], "default": null },
@@ -79,7 +79,7 @@
                               {"name": "free_carfax_report", "type": "boolean", "default": false },
                               {"name": "carfax_one_owner", "type": "boolean", "default": false },
                               {"name": "cpo", "type": "boolean", "default": false },
-                              {"name": "features", "type": {"null", "type": "array", "items": "string" }, "default": null}
+                              {"name": "features", "type": [ "null", {"type": "array", "items": "string" }], "default": null}
 
                             ]
                           }
