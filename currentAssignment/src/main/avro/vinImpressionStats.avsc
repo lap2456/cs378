@@ -1,4 +1,4 @@
-{"namespace": "com.refactorlabs.cs378.assign7",
+{"namespace": "com.refactorlabs.cs378.sessions",
  "type": "record",
  "name": "Session",
  "fields": [

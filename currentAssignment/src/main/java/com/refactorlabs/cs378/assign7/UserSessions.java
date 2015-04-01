@@ -66,11 +66,8 @@ public class UserSessions extends Configured implements Tool {
 		//Process command line input and send to appropriate mapper 
 		//First input line is impression mapper, second is lead mapper
 		String[] inputPaths = appArgs[0].split(",");
-		for ( int i=0; i < inputPaths.length - 1; ++i){
-		  String inputPath = inputPaths[i];
-		  MultipleInputs.addInputPath(job, new Path(inputPath), AvroKeyValueInputFormat.class, SessionMapClass.class);
-		}
-		MultipleInputs.addInputPath(job, new Path(inputPaths[inputPaths.length - 1]), TextInputFormat.class, VinMapClass.class);
+		MultipleInputs.addInputPath(job, new Path(inputPaths[0]), AvroKeyValueInputFormat.class, SessionMapClass.class);
+		MultipleInputs.addInputPath(job, new Path(inputPaths[1]), TextInputFormat.class, VinMapClass.class);
 
 		FileOutputFormat.setOutputPath(job, new Path(appArgs[1]));
 
