@@ -28,16 +28,17 @@ public class VinMapClass extends Mapper<LongWritable, Text, Text, AvroValue<VinI
 			throws IOException, InterruptedException {
 
 		String line = value.toString();
-		
-		VinImpressionCounts.Builder vinBuilder = VinImpressionCounts.newBuilder();
-		
-		String[] values = line.split(",");
-		Long unique_users = Long.parseLong(values[2]);
+		if(line.matches("[\w]+,VDP,[0-9]+")){
+			VinImpressionCounts.Builder vinBuilder = VinImpressionCounts.newBuilder();
+			
+			String[] values = line.split(",");
+			Long unique_users = Long.parseLong(values[2]);
 
-		vinBuilder.setUniqueUserVdpView(unique_users);
-		word.set(values[0]);
+			vinBuilder.setUniqueUserVdpView(unique_users);
+			word.set(values[0]);
 
-		//Write key and session (wrapped in avro value) to context
-		context.write( word, new AvroValue<VinImpressionCounts>(vinBuilder.build()));
+			//Write key and session (wrapped in avro value) to context
+			context.write( word, new AvroValue<VinImpressionCounts>(vinBuilder.build()));
+		}
 	}
 }
