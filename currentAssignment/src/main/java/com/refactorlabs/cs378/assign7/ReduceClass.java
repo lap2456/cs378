@@ -35,16 +35,15 @@ Text, AvroValue<VinImpressionCounts>> {
 
 		for (AvroValue<VinImpressionCounts> value : values){
 			VinImpressionCounts valueDatum = value.datum();
-			VinImpressionCounts.Builder valueDatumBuilder = VinImpressionCounts.newBuilder(valueDatum);
-			if(valueDatumBuilder.hasUniqueUser())
+			if(valueDatum.getUniqueUser() > 0)
 				finalVinImpression.setUniqueUser(valueDatum.getUniqueUser());
-			if(valueDatumBuilder.hasClicks())
+			if(valueDatum.getClicks() != null)
 				finalVinImpression.setClicks(valueDatum.getClicks());
-			if(valueDatumBuilder.hasShareMarketReport())
+			if(valueDatum.getShareMarketReport() > 0)
 				finalVinImpression.setShareMarketReport(valueDatum.getShareMarketReport());
-			if(valueDatumBuilder.hasSubmitContactForm())
+			if(valueDatum.getSubmitContactForm() > 0)
 				finalVinImpression.setSubmitContactForm(valueDatum.getSubmitContactForm());
-			if(valueDatumBuilder.hasUniqueUserVdpView())
+			if(valueDatum.getUniqueUserVdpView() > 0)
 				finalVinImpression.setUniqueUserVdpView(valueDatum.getUniqueUserVdpView());
 		}
 		
