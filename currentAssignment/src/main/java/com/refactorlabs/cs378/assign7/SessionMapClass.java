@@ -63,6 +63,7 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<com
 				}
 				vinBuilder.setClicks(userToNum);
 			}
+			vinToCounts.put(vin, vinBuilder);
 		}
 
 		for(String vin : vinToCounts.keySet()){
