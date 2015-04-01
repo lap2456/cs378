@@ -2,7 +2,7 @@
  "type": "record",
  "name": "Session",
  "fields": [
-      {"name": "user_id", "type": "string"},
+      {"name": "user_id", "type": ["string", "null"], "default": null},
       {"name": "events",
        "type": {"type": "array",
                 "items": {"type": "record",
@@ -36,10 +36,10 @@
                                                         // also: "ALTERNATIVE", "CONTACT_FORM", "FEATURES"
                                                         //       "VEHICLE_HISTORY", "MARKET_REPORT"
                                                      ]
-                                       }    // ,"default": "MARKET_REPORT"
+                                       }     ,"default": "MARKET_REPORT"
                               },
-                              {"name": "event_time", "type": "string" },
-                              {"name": "page", "type": "string" },
+                              {"name": "event_time", "type": ["string", "null"], "default": null },
+                              {"name": "page", "type": ["string", "null"], "default": null },
                               {"name": "referrer", "type": [ "null", "string"], "default": null },
                               {"name": "referring_domain", "type": [ "null", "string"], "default": null },
                               {"name": "city", "type": [ "null", "string"], "default": null },
@@ -49,8 +49,8 @@
                                                              "symbols": [ "New", "Used", "CPO" ] },
                                                     "default": "Used"},
                               {"name": "year", "type": [ "null", "int" ], "default": null },
-                              {"name": "make", "type": "string" },
-                              {"name": "model", "type": "string" },
+                              {"name": "make", "type": "string", "default": null },
+                              {"name": "model", "type": "string", "default": null },
                               {"name": "trim", "type": [ "null", "string"], "default": null },
                               {"name": "body_style", "type": [ "null",
                                                                {"type": "enum", "name": "BodyStyle",
@@ -79,7 +79,7 @@
                               {"name": "free_carfax_report", "type": "boolean", "default": false },
                               {"name": "carfax_one_owner", "type": "boolean", "default": false },
                               {"name": "cpo", "type": "boolean", "default": false },
-                              {"name": "features", "type": {"type": "array", "items": "string" }}
+                              {"name": "features", "type": {"null", "type": "array", "items": "string" }, "default": null}
 
                             ]
                           }

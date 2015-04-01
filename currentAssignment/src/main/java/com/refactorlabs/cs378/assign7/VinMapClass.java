@@ -28,7 +28,7 @@ public class VinMapClass extends Mapper<LongWritable, Text, Text, AvroValue<VinI
 			throws IOException, InterruptedException {
 
 		String line = value.toString();
-		if(line.matches("[\w]+,VDP,[0-9]+")){
+		if(line.matches('[A-Z0-9]+,VDP,[0-9]+')){
 			VinImpressionCounts.Builder vinBuilder = VinImpressionCounts.newBuilder();
 			
 			String[] values = line.split(",");
