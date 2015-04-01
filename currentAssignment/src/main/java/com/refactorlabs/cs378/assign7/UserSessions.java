@@ -68,7 +68,7 @@ public class UserSessions extends Configured implements Tool {
 		String[] inputPaths = appArgs[0].split(",");
 		for ( int i=0; i < inputPaths.length - 1; ++i){
 		  String inputPath = inputPaths[i];
-		  MultipleInputs.addInputPath(job, new Path(inputPath), TextInputFormat.class, SessionMapClass.class);
+		  MultipleInputs.addInputPath(job, new Path(inputPath), AvroKeyValueInputFormat.class, SessionMapClass.class);
 		}
 		MultipleInputs.addInputPath(job, new Path(inputPaths[inputPaths.length - 1]), TextInputFormat.class, VinMapClass.class);
 
