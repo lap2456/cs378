@@ -47,8 +47,8 @@ Text, AvroValue<VinImpressionCounts>> {
 				finalVinImpression.setUniqueUserVdpView(valueDatum.getUniqueUserVdpView());
 		}
 		
-		//if(finalVinImpression.hasUniqueUser())
-		context.write(key, new AvroValue<VinImpressionCounts>(finalVinImpression.build()));
+		if(finalVinImpression.hasUniqueUser())
+			context.write(key, new AvroValue<VinImpressionCounts>(finalVinImpression.build()));
 
 	}
 }
