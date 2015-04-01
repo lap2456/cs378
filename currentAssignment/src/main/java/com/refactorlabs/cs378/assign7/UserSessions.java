@@ -50,10 +50,10 @@ public class UserSessions extends Configured implements Tool {
 		conf.set("mapreduce.user.classpath.first", "true");
 
 		// Specify the Map
+		job.setMapperClass(SessionMapClass.class);
 		job.setInputFormatClass(AvroKeyValueInputFormat.class);
 		AvroJob.setInputKeySchema(job, Schema.create(Schema.Type.STRING));
 		AvroJob.setInputValueSchema(job, Session.getClassSchema());
-		job.setMapperClass(SessionMapClass.class);
 		job.setMapOutputKeyClass(Text.class);
 		AvroJob.setMapOutputValueSchema(job, VinImpressionCounts.getClassSchema());
 		
@@ -66,7 +66,6 @@ public class UserSessions extends Configured implements Tool {
 		//Process command line input and send to appropriate mapper 
 		//First input line is impression mapper, second is lead mapper
 		String[] inputPaths = appArgs[0].split(",");
-		System.err.println("appArgs[0]");
 		for ( int i=0; i < inputPaths.length - 1; ++i){
 		  String inputPath = inputPaths[i];
 		  MultipleInputs.addInputPath(job, new Path(inputPath), TextInputFormat.class, SessionMapClass.class);
