@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
 import org.apache.hadoop.io.LongWritable;
@@ -21,10 +22,10 @@ import org.apache.hadoop.mapreduce.Mapper;
  * Mapper will take User sessions and output session objects
  * as values and the user id and apikey as the key. 
  */
-public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Session>, Text, AvroValue<VinImpressionCounts>> {
+public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<com.refactorlabs.cs378.assign7.Session>, Text, AvroValue<VinImpressionCounts>> {
 
 	@Override
-	public void map(AvroKey<CharSequence> key, AvroValue<Session> value, Context context)
+	public void map(AvroKey<CharSequence> key, AvroValue<com.refactorlabs.cs378.assign7.Session> value, Context context)
 			throws IOException, InterruptedException {
 
 		CharSequence keyDatum = key.datum();
