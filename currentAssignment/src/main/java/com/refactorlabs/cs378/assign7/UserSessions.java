@@ -19,7 +19,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 /**
- * MultipleInputs main driver program for creating user session objects
+ * UserSessions main driver program for creating user session objects
  * using Avro
  * 
  * @author Louis Pujol (louispujol@yahoo.com)
@@ -27,7 +27,7 @@ import org.apache.hadoop.util.ToolRunner;
  *
  *
  */
-public class MultipleInputs extends Configured implements Tool {
+public class UserSessions extends Configured implements Tool {
 
 	
 	/**
@@ -36,25 +36,25 @@ public class MultipleInputs extends Configured implements Tool {
 	 */
 	public int run(String[] args) throws Exception {
 		if (args.length != 2) {
-			System.err.println("Usage: MultipleInputs <input path> <output path>");
+			System.err.println("Usage: UserSessions <input path> <output path>");
 			return -1;
 		}
 
 		Configuration conf = getConf();
-		Job job = new Job(conf, "MultipleInputs");
+		Job job = new Job(conf, "UserSessions");
 		String[] appArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 
 		// Identify the JAR file to replicate to all machines.
-		job.setJarByClass(MultipleInputs.class);
+		job.setJarByClass(UserSessions.class);
 		// Use this JAR first in the classpath (We also set a bootstrap script in AWS)
 		conf.set("mapreduce.user.classpath.first", "true");
 
 		// Specify the Map
-		job.setMapperClass(SessionMapClass.class);
 		job.setInputFormatClass(AvroKeyValueInputFormat.class);
-		AvroJob.setInputKeySchema(job, Schema.create(Schema.Type.STRING));
-		AvroJob.setInputValueSchema(job, com.refactorlabs.cs378.assign7.Session.getClassSchema());
+		job.setMapperClass(SessionMapClass.class);
 		job.setMapOutputKeyClass(Text.class);
+		AvroJob.setInputKeySchema(job, Schema.create(Schema.Type.STRING));
+		AvroJob.setInputValueSchema(job, Session.getClassSchema());
 		AvroJob.setMapOutputValueSchema(job, VinImpressionCounts.getClassSchema());
 		
 		// Specify the Reduce
@@ -86,7 +86,7 @@ public class MultipleInputs extends Configured implements Tool {
 	 * job and waits for it to complete.
 	 */
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new MultipleInputs(), args);
+		int res = ToolRunner.run(new Configuration(), new UserSessions(), args);
 		System.exit(res);
 	}
 
