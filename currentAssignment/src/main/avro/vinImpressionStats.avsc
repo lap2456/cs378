@@ -86,7 +86,7 @@
                 }
         },
         {"name": "vinImpressions",
-          "type": {"type": "array",
+          "type": ["null", {"type": "array",
             "items": {  "type": "record",
                         "name": "VinImpressionCounts",
                         "fields": [
@@ -100,7 +100,8 @@
                            {"name": "unique_user_vdp_view",  "type": "long", "default": 0 }
                        ]
                       }
-          }
+          }],
+          "default": null
         }
    ]
  }
