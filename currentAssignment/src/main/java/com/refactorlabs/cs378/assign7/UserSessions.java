@@ -66,6 +66,7 @@ public class UserSessions extends Configured implements Tool {
 		//Process command line input and send to appropriate mapper 
 		//First input line is impression mapper, second is lead mapper
 		String[] inputPaths = appArgs[0].split(",");
+		System.err.println("appArgs[0]");
 		for ( int i=0; i < inputPaths.length - 1; ++i){
 		  String inputPath = inputPaths[i];
 		  MultipleInputs.addInputPath(job, new Path(inputPath), TextInputFormat.class, SessionMapClass.class);
