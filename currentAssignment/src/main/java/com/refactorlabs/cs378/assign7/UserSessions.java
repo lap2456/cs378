@@ -45,7 +45,7 @@ public class UserSessions extends Configured implements Tool {
 		String[] appArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 
 		// Identify the JAR file to replicate to all machines.
-		job.setJarByClass(MultipleInputs.class);
+		job.setJarByClass(UserSessions.class);
 		// Use this JAR first in the classpath (We also set a bootstrap script in AWS)
 		conf.set("mapreduce.user.classpath.first", "true");
 
