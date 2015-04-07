@@ -57,7 +57,7 @@ public class PreRun extends Configured implements Tool {
 		// Specify the Reduce
 		job.setOutputFormatClass(AvroKeyValueOutputFormat.class);
 		job.setReducerClass(PreRunReduceClass.class);
-		AvroJob.setOutputKeySchema(job, Schema.create(Schema.Type.STRING),
+		AvroJob.setOutputKeySchema(job, Schema.create(Schema.Type.STRING));
 		AvroJob.setOutputValueSchema(job, Session.getClassSchema());
 
 		// Grab the input file and output directory from the command line.
