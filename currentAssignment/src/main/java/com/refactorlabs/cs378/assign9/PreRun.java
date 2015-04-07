@@ -3,6 +3,8 @@ package com.refactorlabs.cs378.assign9;
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.Pair;
 import org.apache.avro.mapreduce.AvroJob;
+import org.apache.avro.mapreduce.AvroMultipleOutputs;
+import org.apache.avro.mapreduce.AvroKeyValueInputFormat;
 import org.apache.avro.mapreduce.AvroKeyValueOutputFormat;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -29,7 +31,6 @@ import org.apache.hadoop.util.ToolRunner;
  */
 public class PreRun extends Configured implements Tool {
 
-	
 	/**
 	 * The run() method is called (indirectly) from main(), and contains all the job
 	 * setup and configuration.
@@ -50,19 +51,29 @@ public class PreRun extends Configured implements Tool {
 		conf.set("mapreduce.user.classpath.first", "true");
 
 		// Specify the Map
-		job.setInputFormatClass(TextInputFormat.class);
+		job.setInputFormatClass(AvroKeyValueInputFormat.class);
 		job.setMapperClass(PreRunMapClass.class);
-		job.setMapOutputKeyClass(Text.class);
+		AvroJob.setInputKeySchema(job, Schema.create(Schema.Type.STRING));
+		AvroJob.setInputValueSchema(job, Session.getClassSchema());
+		AvroJob.setMapOutputKeySchema(job, Schema.create(Schema.Type.STRING));
 		AvroJob.setMapOutputValueSchema(job, Session.getClassSchema());
 
-		// Specify the Reduce
 		job.setOutputFormatClass(AvroKeyValueOutputFormat.class);
-		job.setReducerClass(PreRunReduceClass.class);
 		AvroJob.setOutputKeySchema(job, Schema.create(Schema.Type.STRING));
 		AvroJob.setOutputValueSchema(job, Session.getClassSchema());
 
+		AvroMultipleOutputs.addNamedOutput(job, "Submitter", AvroKeyValueOutputFormat.class, Schema.create(Schema.Type.STRING), Session.getClassSchema());
+		AvroMultipleOutputs.addNamedOutput(job, "Sharer", AvroKeyValueOutputFormat.class, Schema.create(Schema.Type.STRING), Session.getClassSchema());
+		AvroMultipleOutputs.addNamedOutput(job, "Clicker", AvroKeyValueOutputFormat.class, Schema.create(Schema.Type.STRING), Session.getClassSchema());
+		AvroMultipleOutputs.addNamedOutput(job, "Shower", AvroKeyValueOutputFormat.class, Schema.create(Schema.Type.STRING), Session.getClassSchema());
+		AvroMultipleOutputs.addNamedOutput(job, "Visitor", AvroKeyValueOutputFormat.class, Schema.create(Schema.Type.STRING), Session.getClassSchema());
+		AvroMultipleOutputs.addNamedOutput(job, "Other", AvroKeyValueOutputFormat.class, Schema.create(Schema.Type.STRING), Session.getClassSchema());
+
 		// Grab the input file and output directory from the command line.
-		FileInputFormat.addInputPath(job, new Path(appArgs[0]));
+		String[] inputPaths = appArgs[0].split(",");
+		for ( String inputPath : inputPaths ) {
+			FileInputFormat.addInputPath(job, new Path(inputPath));
+		}
 		FileOutputFormat.setOutputPath(job, new Path(appArgs[1]));
 
 		// Initiate the map-reduce job, and wait for completion.
