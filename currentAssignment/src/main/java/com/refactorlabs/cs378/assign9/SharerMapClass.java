@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroKey;
@@ -36,7 +39,7 @@ public class SharerMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Sess
 			ClickSubtypeStatisticsData.Builder thisBuilder;
 			thisBuilder = subtypeMap.get(e.getEventSubtype());
 			if(thisBuilder == null){
-				thisBuilder = new ClickSubtypeStatisticsData.newBuilder();
+				thisBuilder = ClickSubtypeStatisticsData.newBuilder();
 			}
 
 			if(thisBuilder.hasSessionCount()){
