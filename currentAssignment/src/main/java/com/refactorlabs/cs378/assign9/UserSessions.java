@@ -135,13 +135,21 @@ public class UserSessions extends Configured implements Tool {
 		sharerJob.waitForCompletion(true);
 		
 		//create the final job
-		/*Job aggregatorJob = new Job(conf, "UserSessionsAggregator");
+		/*
+		Job aggregatorJob = new Job(conf, "UserSessionsAggregator");
 		aggregatorJob.setJarByClass(UserSessions.class);
-		aggregatorJob.setInputFormatClass(TextInputFormat.class);
+		aggregatorJob.setInputFormatClass(AvroKeyValueInputFormat.class);
 		aggregatorJob.setMapperClass(AggregatorMapClass.class);
+		AvroJob.setInputKeySchema(aggregatorJob, ClickSubtypeStatisticsKey.getClassSchema());
+		AvroJob.setInputValueSchema(aggregatorJob, ClickSubtypeStatisticsData.getClassSchema());
 		aggregatorJob.setMapOutputKeyClass(Text.class);
-		aggregatorJob.setMapOutputValueClass(LongArrayWritable.class);*/
-
+		AvroJob.setMapOutputValueSchema(aggregatorJob, ClickSubtypeStatisticsData.getClassSchema());
+		aggregatorJob.setReducerClass(AggregatorReduceClass.class);
+		aggregatorJob.setOutputFormatClass(TextOutputFormat.class);
+		aggregatorJob.setOutputKeyClass(Text.class);
+		AvroJob.setOutputValueSchema(aggregatorJob, ClickSubtypeStatisticsData.getClassSchema());
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/SubmitterData/" + "part-r-00000.avro"))
+		*/
 		return 0;
 	}
 
