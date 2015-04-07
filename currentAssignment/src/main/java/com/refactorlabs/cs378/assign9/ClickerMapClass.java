@@ -21,7 +21,7 @@ import org.apache.hadoop.mapreduce.Mapper;
  * @author David Franke (dfranke@cs.utexas.edu)
  */
 
-public class SubmitterMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Session>, AvroKey<clickSubtypeStatsKey>, AvroValue<clickSubtypeStatsData>> {
+public class ClickerMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Session>, AvroKey<clickSubtypeStatsKey>, AvroValue<clickSubtypeStatsData>> {
 
 	@Override
 	public void map(AvroKey<CharSequence> key, AvroValue<Session> value, Context context)
@@ -53,7 +53,7 @@ public class SubmitterMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<S
 			thisBuilder.setTotalCount(totalEvents);
 			
 			clickSubtypeStatsKey.Builder keyBuilder = clickSubtypeStatsKey.newBuilder();
-			keyBuilder.setSessionType("SUBMIT");
+			keyBuilder.setSessionType("CLICK");
 			keyBuilder.setClickSubtype(convertSubtypeToString(thisSubtype));
 			context.write(new AvroKey<clickSubtypeStatsKey>(keyBuilder.build()), new AvroValue<clickSubtypeStatsData>(thisBuilder.build()));
 		}

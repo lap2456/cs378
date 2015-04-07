@@ -88,6 +88,7 @@ public class UserSessions extends Configured implements Tool {
 		AvroJob.setInputValueSchema(submitterJob, Session.getClassSchema());
 		AvroJob.setMapOutputKeySchema(submitterJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setMapOutputValueSchema(submitterJob, ClickSubtypeStatisticsData.getClassSchema());
+		submitterJob.setReducerClass(ClickReduceClass.class);
 		submitterJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
 		AvroJob.setOutputKeySchema(submitterJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setOutputValueSchema(submitterJob, ClickSubtypeStatisticsData.getClassSchema());
@@ -105,6 +106,7 @@ public class UserSessions extends Configured implements Tool {
 		AvroJob.setInputValueSchema(clickerJob, Session.getClassSchema());
 		AvroJob.setMapOutputKeySchema(clickerJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setMapOutputValueSchema(clickerJob, ClickSubtypeStatisticsData.getClassSchema());
+		clickerJob.setReducerClass(ClickReduceClass.class);
 		clickerJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
 		AvroJob.setOutputKeySchema(clickerJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setOutputValueSchema(clickerJob, ClickSubtypeStatisticsData.getClassSchema());
@@ -122,6 +124,7 @@ public class UserSessions extends Configured implements Tool {
 		AvroJob.setInputValueSchema(sharerJob, Session.getClassSchema());
 		AvroJob.setMapOutputKeySchema(sharerJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setMapOutputValueSchema(sharerJob, ClickSubtypeStatisticsData.getClassSchema());
+		sharerJob.setReducerClass(ClickReduceClass.class);
 		sharerJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
 		AvroJob.setOutputKeySchema(sharerJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setOutputValueSchema(sharerJob, ClickSubtypeStatisticsData.getClassSchema());
