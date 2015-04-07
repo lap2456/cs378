@@ -82,5 +82,6 @@ public class SharerMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Sess
 			case PHOTO_MODAL : return "PHOTO_MODAL";
 			case BADGES : return "BADGES";
 		}
+		return "DEFAULT";
 	}
 }

@@ -82,5 +82,6 @@ public class SubmitterMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<S
 			case PHOTO_MODAL : return "PHOTO_MODAL";
 			case BADGES : return "BADGES";
 		}
+		return "DEFAULT";
 	}
 }

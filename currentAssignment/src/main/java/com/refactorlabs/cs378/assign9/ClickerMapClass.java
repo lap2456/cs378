@@ -82,5 +82,6 @@ public class ClickerMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 			case PHOTO_MODAL : return "PHOTO_MODAL";
 			case BADGES : return "BADGES";
 		}
+		return "DEFAULT";
 	}
 }
