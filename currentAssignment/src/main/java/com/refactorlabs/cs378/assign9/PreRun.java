@@ -61,7 +61,7 @@ public class PreRun extends Configured implements Tool {
 		AvroJob.setOutputValueSchema(job, Session.getClassSchema());
 
 		// Grab the input file and output directory from the command line.
-		FileInputFormat.addInputPath(job, new Path(inputPath));
+		FileInputFormat.addInputPath(job, new Path(appArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(appArgs[1]));
 
 		// Initiate the map-reduce job, and wait for completion.
