@@ -42,18 +42,11 @@ public class UserSessions extends Configured implements Tool {
 		}
 
 		Configuration conf = getConf();
-		String[] appArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-
 		Job job = new Job(conf, "UserSessions");
-		Job submitterJob = new Job(conf, "UserSessionsSubmitter");
-		Job clickerJob = new Job(conf, "UserSessionsClicker");
-		Job sharerJob = new Job(conf, "UserSessionsSharer");
+		String[] appArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 
 		// Identify the JAR file to replicate to all machines.
 		job.setJarByClass(UserSessions.class);
-		submitterJob.setJarByClass(UserSessions.class);
-		clickerJob.setJarByClass(UserSessions.class);
-		sharerJob.setJarByClass(UserSessions.class);
 		// Use this JAR first in the classpath (We also set a bootstrap script in AWS)
 		conf.set("mapreduce.user.classpath.first", "true");
 
@@ -64,48 +57,6 @@ public class UserSessions extends Configured implements Tool {
 		AvroJob.setInputValueSchema(job, Session.getClassSchema());
 		AvroJob.setMapOutputKeySchema(job, Schema.create(Schema.Type.STRING));
 		AvroJob.setMapOutputValueSchema(job, Session.getClassSchema());
-
-		submitterJob.setInputFormatClass(AvroKeyValueInputFormat.class);
-		submitterJob.setMapperClass(SubmitterMapClass.class);
-		AvroJob.setInputKeySchema(submitterJob, Schema.create(Schema.Type.STRING));
-		AvroJob.setInputValueSchema(submitterJob, Session.getClassSchema());
-		AvroJob.setMapOutputKeySchema(submitterJob, ClickSubtypeStatisticsKey.getClassSchema());
-		AvroJob.setMapOutputValueSchema(submitterJob, ClickSubtypeStatisticsData.getClassSchema());
-		submitterJob.setReducerClass(ClickReduceClass.class);
-		submitterJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
-		AvroJob.setOutputKeySchema(submitterJob, ClickSubtypeStatisticsKey.getClassSchema());
-		AvroJob.setOutputValueSchema(submitterJob, ClickSubtypeStatisticsData.getClassSchema());
-		FileInputFormat.addInputPath(submitterJob, new Path(appArgs[1] + "/Submitter-m-00000.avro"));
-		FileInputFormat.addInputPath(submitterJob, new Path(appArgs[1] + "/Submitter-m-00001.avro"));
-		FileInputFormat.addInputPath(submitterJob, new Path(appArgs[1] + "/Submitter-m-00002.avro"));
-		
-		clickerJob.setInputFormatClass(AvroKeyValueInputFormat.class);
-		clickerJob.setMapperClass(ClickerMapClass.class);
-		AvroJob.setInputKeySchema(clickerJob, Schema.create(Schema.Type.STRING));
-		AvroJob.setInputValueSchema(clickerJob, Session.getClassSchema());
-		AvroJob.setMapOutputKeySchema(clickerJob, ClickSubtypeStatisticsKey.getClassSchema());
-		AvroJob.setMapOutputValueSchema(clickerJob, ClickSubtypeStatisticsData.getClassSchema());
-		clickerJob.setReducerClass(ClickReduceClass.class);
-		clickerJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
-		AvroJob.setOutputKeySchema(clickerJob, ClickSubtypeStatisticsKey.getClassSchema());
-		AvroJob.setOutputValueSchema(clickerJob, ClickSubtypeStatisticsData.getClassSchema());
-		FileInputFormat.addInputPath(clickerJob, new Path(appArgs[1] + "/Clicker-m-00000.avro"));
-		FileInputFormat.addInputPath(clickerJob, new Path(appArgs[1] + "/Clicker-m-00001.avro"));
-		FileInputFormat.addInputPath(clickerJob, new Path(appArgs[1] + "/Clicker-m-00002.avro"));
-
-		sharerJob.setInputFormatClass(AvroKeyValueInputFormat.class);
-		sharerJob.setMapperClass(SharerMapClass.class);
-		AvroJob.setInputKeySchema(sharerJob, Schema.create(Schema.Type.STRING));
-		AvroJob.setInputValueSchema(sharerJob, Session.getClassSchema());
-		AvroJob.setMapOutputKeySchema(sharerJob, ClickSubtypeStatisticsKey.getClassSchema());
-		AvroJob.setMapOutputValueSchema(sharerJob, ClickSubtypeStatisticsData.getClassSchema());
-		sharerJob.setReducerClass(ClickReduceClass.class);
-		sharerJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
-		AvroJob.setOutputKeySchema(sharerJob, ClickSubtypeStatisticsKey.getClassSchema());
-		AvroJob.setOutputValueSchema(sharerJob, ClickSubtypeStatisticsData.getClassSchema());
-		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00000.avro"));
-		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00001.avro"));
-		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00002.avro"));
 
 		job.setOutputFormatClass(AvroKeyValueOutputFormat.class);
 		AvroJob.setOutputKeySchema(job, Schema.create(Schema.Type.STRING));
@@ -124,15 +75,62 @@ public class UserSessions extends Configured implements Tool {
 			FileInputFormat.addInputPath(job, new Path(inputPath));
 		}
 		FileOutputFormat.setOutputPath(job, new Path(appArgs[1]));
-		FileOutputFormat.setOutputPath(submitterJob, new Path(appArgs[1] + "SubmitterData"));
-		FileOutputFormat.setOutputPath(clickerJob, new Path(appArgs[1] + "ClickerData"));
-		FileOutputFormat.setOutputPath(sharerJob, new Path(appArgs[1] + "SharerData"));
 
 		// Initiate the map-reduce job, and wait for completion.
 		job.waitForCompletion(true);
 
 		//create the 3 jobs
+		Job submitterJob = new Job(conf, "UserSessionsSubmitter");
+		submitterJob.setJarByClass(UserSessions.class);
+		submitterJob.setInputFormatClass(AvroKeyValueInputFormat.class);
+		submitterJob.setMapperClass(SubmitterMapClass.class);
+		AvroJob.setInputKeySchema(submitterJob, Schema.create(Schema.Type.STRING));
+		AvroJob.setInputValueSchema(submitterJob, Session.getClassSchema());
+		AvroJob.setMapOutputKeySchema(submitterJob, ClickSubtypeStatisticsKey.getClassSchema());
+		AvroJob.setMapOutputValueSchema(submitterJob, ClickSubtypeStatisticsData.getClassSchema());
+		submitterJob.setReducerClass(ClickReduceClass.class);
+		submitterJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
+		AvroJob.setOutputKeySchema(submitterJob, ClickSubtypeStatisticsKey.getClassSchema());
+		AvroJob.setOutputValueSchema(submitterJob, ClickSubtypeStatisticsData.getClassSchema());
+		FileInputFormat.addInputPath(submitterJob, new Path(appArgs[1] + "/Submitter-m-00000.avro"));
+		FileInputFormat.addInputPath(submitterJob, new Path(appArgs[1] + "/Submitter-m-00001.avro"));
+		FileInputFormat.addInputPath(submitterJob, new Path(appArgs[1] + "/Submitter-m-00002.avro"));
+		FileOutputFormat.setOutputPath(submitterJob, new Path(appArgs[1] + "/SubmitterData"));
 
+		Job clickerJob = new Job(conf, "UserSessionsClicker");
+		clickerJob.setJarByClass(UserSessions.class);
+		clickerJob.setInputFormatClass(AvroKeyValueInputFormat.class);
+		clickerJob.setMapperClass(ClickerMapClass.class);
+		AvroJob.setInputKeySchema(clickerJob, Schema.create(Schema.Type.STRING));
+		AvroJob.setInputValueSchema(clickerJob, Session.getClassSchema());
+		AvroJob.setMapOutputKeySchema(clickerJob, ClickSubtypeStatisticsKey.getClassSchema());
+		AvroJob.setMapOutputValueSchema(clickerJob, ClickSubtypeStatisticsData.getClassSchema());
+		clickerJob.setReducerClass(ClickReduceClass.class);
+		clickerJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
+		AvroJob.setOutputKeySchema(clickerJob, ClickSubtypeStatisticsKey.getClassSchema());
+		AvroJob.setOutputValueSchema(clickerJob, ClickSubtypeStatisticsData.getClassSchema());
+		FileInputFormat.addInputPath(clickerJob, new Path(appArgs[1] + "/Clicker-m-00000.avro"));
+		FileInputFormat.addInputPath(clickerJob, new Path(appArgs[1] + "/Clicker-m-00001.avro"));
+		FileInputFormat.addInputPath(clickerJob, new Path(appArgs[1] + "/Clicker-m-00002.avro"));
+		FileOutputFormat.setOutputPath(clickerJob, new Path(appArgs[1] + "/ClickerData"));
+
+		Job sharerJob = new Job(conf, "UserSessionsSharer");
+		sharerJob.setJarByClass(UserSessions.class);
+		sharerJob.setInputFormatClass(AvroKeyValueInputFormat.class);
+		sharerJob.setMapperClass(SharerMapClass.class);
+		AvroJob.setInputKeySchema(sharerJob, Schema.create(Schema.Type.STRING));
+		AvroJob.setInputValueSchema(sharerJob, Session.getClassSchema());
+		AvroJob.setMapOutputKeySchema(sharerJob, ClickSubtypeStatisticsKey.getClassSchema());
+		AvroJob.setMapOutputValueSchema(sharerJob, ClickSubtypeStatisticsData.getClassSchema());
+		sharerJob.setReducerClass(ClickReduceClass.class);
+		sharerJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
+		AvroJob.setOutputKeySchema(sharerJob, ClickSubtypeStatisticsKey.getClassSchema());
+		AvroJob.setOutputValueSchema(sharerJob, ClickSubtypeStatisticsData.getClassSchema());
+		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00000.avro"));
+		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00001.avro"));
+		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00002.avro"));
+		FileOutputFormat.setOutputPath(sharerJob, new Path(appArgs[1] + "/SharerData"));
+		
 		submitterJob.submit();
 		clickerJob.submit();
 		sharerJob.submit();
