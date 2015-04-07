@@ -3,6 +3,7 @@ package com.refactorlabs.cs378.assign9;
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.Pair;
 import org.apache.avro.mapreduce.AvroJob;
+import org.apache.avro.mapreduce.AvroKeyValueOutputFormat;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
