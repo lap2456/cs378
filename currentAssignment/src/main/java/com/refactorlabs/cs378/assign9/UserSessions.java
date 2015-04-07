@@ -96,7 +96,6 @@ public class UserSessions extends Configured implements Tool {
 		FileInputFormat.addInputPath(submitterJob, new Path(appArgs[1] + "/Submitter-m-00001.avro"));
 		FileInputFormat.addInputPath(submitterJob, new Path(appArgs[1] + "/Submitter-m-00002.avro"));
 		FileOutputFormat.setOutputPath(submitterJob, new Path(appArgs[1] + "/SubmitterData"));
-		submitterJob.waitForCompletion(true);
 
 		Job clickerJob = new Job(conf, "UserSessionsClicker");
 		clickerJob.setJarByClass(UserSessions.class);
@@ -114,7 +113,6 @@ public class UserSessions extends Configured implements Tool {
 		FileInputFormat.addInputPath(clickerJob, new Path(appArgs[1] + "/Clicker-m-00001.avro"));
 		FileInputFormat.addInputPath(clickerJob, new Path(appArgs[1] + "/Clicker-m-00002.avro"));
 		FileOutputFormat.setOutputPath(clickerJob, new Path(appArgs[1] + "/ClickerData"));
-		clickerJob.waitForCompletion(true);
 
 		Job sharerJob = new Job(conf, "UserSessionsSharer");
 		sharerJob.setJarByClass(UserSessions.class);
@@ -132,7 +130,10 @@ public class UserSessions extends Configured implements Tool {
 		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00001.avro"));
 		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00002.avro"));
 		FileOutputFormat.setOutputPath(sharerJob, new Path(appArgs[1] + "/SharerData"));
-		sharerJob.waitForCompletion(true);
+		
+		submitterJob.submit();
+		clickerJob.submit();
+		sharerJob.submit();
 		
 		//create the final job
 		/*
