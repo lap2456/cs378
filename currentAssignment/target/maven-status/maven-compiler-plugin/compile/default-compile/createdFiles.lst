@@ -40,10 +40,12 @@ com/refactorlabs/cs378/assign6/Event$Builder.class
 com/refactorlabs/cs378/assign1/WordCount.class
 com/refactorlabs/cs378/assign6/MapClass.class
 com/refactorlabs/cs378/assign4/MapClass.class
-com/refactorlabs/cs378/assign6/ComparableEvent.class
 com/refactorlabs/cs378/assign9/SessionMapClass.class
+com/refactorlabs/cs378/assign6/ComparableEvent.class
+com/refactorlabs/cs378/assign9/PreRun.class
 com/refactorlabs/cs378/assign9/Session.class
 com/refactorlabs/cs378/assign9/Session$Builder.class
+com/refactorlabs/cs378/assign9/PreRunMapClass.class
 com/refactorlabs/cs378/assign9/ClickerMapClass.class
 com/refactorlabs/cs378/assign3/MapClass.class
 com/refactorlabs/cs378/assign6/Event.class
@@ -75,6 +77,7 @@ com/refactorlabs/cs378/assign8/Session.class
 com/refactorlabs/cs378/assign9/Event$Builder.class
 com/refactorlabs/cs378/assign9/SubmitterMapClass$1.class
 com/refactorlabs/cs378/assign2/WordStatistics.class
+com/refactorlabs/cs378/assign9/PreRunReduceClass.class
 com/refactorlabs/cs378/assign9/SharerMapClass.class
 com/refactorlabs/cs378/assign9/Condition.class
 com/refactorlabs/cs378/assign5/WordStatisticsData$Builder.class
