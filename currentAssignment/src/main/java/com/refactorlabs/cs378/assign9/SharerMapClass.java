@@ -21,7 +21,7 @@ import org.apache.hadoop.mapreduce.Mapper;
  * @author David Franke (dfranke@cs.utexas.edu)
  */
 
-public class SharerMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Session>, AvroKey<clickSubtypeStatsKey>, AvroValue<clickSubtypeStatsData>> {
+public class SharerMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Session>, AvroKey<ClickSubtypeStatisticsKey>, AvroValue<ClickSubtypeStatisticsData>> {
 
 	@Override
 	public void map(AvroKey<CharSequence> key, AvroValue<Session> value, Context context)
@@ -30,13 +30,13 @@ public class SharerMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Sess
 		CharSequence keyDatum = key.datum();
 		List<Event> events = value.datum().getEvents();
 		
-		Map<EventSubtype, clickSubtypeStatsData.Builder> subtypeMap = new TreeMap<EventSubtype, clickSubtypeStatsData.Builder>();
+		Map<EventSubtype, ClickSubtypeStatisticsData.Builder> subtypeMap = new TreeMap<EventSubtype, ClickSubtypeStatisticsData.Builder>();
 		Long totalEvents = 0L;
 		for(Event e : events){
-			clickSubtypeStatsData.Builder thisBuilder;
+			ClickSubtypeStatisticsData.Builder thisBuilder;
 			thisBuilder = subtypeMap.get(e.getEventSubtype());
 			if(thisBuilder == null){
-				thisBuilder = new clickSubtypeStatsData.newBuilder();
+				thisBuilder = new ClickSubtypeStatisticsData.newBuilder();
 			}
 
 			if(thisBuilder.hasSessionCount()){
@@ -49,13 +49,13 @@ public class SharerMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Sess
 		}
 
 		for(EventSubtype thisSubtype : subtypeMap.keySet()){
-			clickSubtypeStatsData.Builder thisBuilder = subtypeMap.get(thisSubtype);
+			ClickSubtypeStatisticsData.Builder thisBuilder = subtypeMap.get(thisSubtype);
 			thisBuilder.setTotalCount(totalEvents);
-			
-			clickSubtypeStatsKey.Builder keyBuilder = clickSubtypeStatsKey.newBuilder();
+
+			ClickSubtypeStatisticsKey.Builder keyBuilder = ClickSubtypeStatisticsKey.newBuilder();
 			keyBuilder.setSessionType("SHARE");
 			keyBuilder.setClickSubtype(convertSubtypeToString(thisSubtype));
-			context.write(new AvroKey<clickSubtypeStatsKey>(keyBuilder.build()), new AvroValue<clickSubtypeStatsData>(thisBuilder.build()));
+			context.write(new AvroKey<ClickSubtypeStatisticsKey>(keyBuilder.build()), new AvroValue<ClickSubtypeStatisticsData>(thisBuilder.build()));
 		}
 	}
 

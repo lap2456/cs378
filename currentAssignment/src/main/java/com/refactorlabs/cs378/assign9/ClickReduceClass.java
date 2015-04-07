@@ -22,17 +22,17 @@ import org.apache.hadoop.mapreduce.Reducer;
  * @author David Franke (dfranke@cs.utexas.edu)
  */
 public class ClickReduceClass
-extends Reducer<AvroKey<clickSubtypeStatsKey>, AvroValue<ClickSubtypeStatsData>,
-AvroKey<clickSubtypeStatsKey>, AvroValue<ClickSubtypeStatsData>> {
+extends Reducer<AvroKey<ClickSubtypeStatisticsKey>, AvroValue<ClickSubtypeStatisticsData>,
+AvroKey<ClickSubtypeStatisticsKey>, AvroValue<ClickSubtypeStatisticsData>> {
 
 	@Override
-	public void reduce(AvroKey<clickSubtypeStatsKey> key, Iterable<AvroValue<ClickSubtypeStatsData>> values, Context context)
+	public void reduce(AvroKey<ClickSubtypeStatisticsKey> key, Iterable<AvroValue<ClickSubtypeStatisticsData>> values, Context context)
 			throws IOException, InterruptedException {
 		
-		ClickSubtypeStatsData.Builder finalSubtypeData = ClickSubtypeStatsData.newBuilder();
+		ClickSubtypeStatisticsData.Builder finalSubtypeData = ClickSubtypeStatisticsData.newBuilder();
 
-		for (AvroValue<ClickSubtypeStatsData> value : values){
-			ClickSubtypeStatsData valueDatum = value.datum();
+		for (AvroValue<ClickSubtypeStatisticsData> value : values){
+			ClickSubtypeStatisticsData valueDatum = value.datum();
 			if(!finalSubtypeData.hasSessionCount())
 				finalSubtypeData.setSessionCount(0L);
 			finalSubtypeData.setSessionCount(finalSubtypeData.getSessionCount() + valueDatum.getSessionCount());
@@ -45,6 +45,6 @@ AvroKey<clickSubtypeStatsKey>, AvroValue<ClickSubtypeStatsData>> {
 		finalSubtypeData.setVariance((double)(finalSubtypeData.getSumOfSquares()/(finalSubtypeData.getTotalCount()-1L)));
 		finalSubtypeData.setMean((double)(finalSubtypeData.getSessionCount()/finalSubtypeData.getTotalCount()));
 		
-		context.write(key, new AvroValue<ClickSubtypeStatsData>(finalSubtypeData.build()));
+		context.write(key, new AvroValue<ClickSubtypeStatisticsData>(finalSubtypeData.build()));
 	}
 }
