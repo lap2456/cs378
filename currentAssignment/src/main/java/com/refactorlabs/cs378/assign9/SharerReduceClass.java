@@ -21,7 +21,7 @@ import org.apache.hadoop.mapreduce.Reducer;
  * @author Louis Pujol (louispujol@yahoo.com)
  * @author David Franke (dfranke@cs.utexas.edu)
  */
-public class ClickReduceClass
+public class SharerReduceClass
 extends Reducer<AvroKey<ClickSubtypeStatisticsKey>, AvroValue<ClickSubtypeStatisticsData>,
 AvroKey<ClickSubtypeStatisticsKey>, AvroValue<ClickSubtypeStatisticsData>> {
 
@@ -36,14 +36,18 @@ AvroKey<ClickSubtypeStatisticsKey>, AvroValue<ClickSubtypeStatisticsData>> {
 			if(!finalSubtypeData.hasSessionCount())
 				finalSubtypeData.setSessionCount(0L);
 			finalSubtypeData.setSessionCount(finalSubtypeData.getSessionCount() + valueDatum.getSessionCount());
+
 			if(!finalSubtypeData.hasTotalCount())
 				finalSubtypeData.setTotalCount(0L);
 			finalSubtypeData.setTotalCount(finalSubtypeData.getTotalCount() + valueDatum.getTotalCount());
+			
+			if(!finalSubtypeData.hasSumOfSquares())
+				finalSubtypeData.setSumOfSquares(0L);
+			finalSubtypeData.setSumOfSquares(finalSubtypeData.getSumOfSquares() + valueDatum.getSumOfSquares());
 		}
 
-		finalSubtypeData.setSumOfSquares(finalSubtypeData.getSessionCount() * finalSubtypeData.getSessionCount());
-		finalSubtypeData.setVariance((double)(finalSubtypeData.getSumOfSquares()/(finalSubtypeData.getTotalCount()-1L)));
-		finalSubtypeData.setMean((double)(finalSubtypeData.getSessionCount()/finalSubtypeData.getTotalCount()));
+		finalSubtypeData.setMean((double)(finalSubtypeData.getTotalCount()/finalSubtypeData.getSessionCount()));
+		finalSubtypeData.setVariance((((double)finalSubtypeData.getSumOfSquares())/((double)finalSubtypeData.getSessionCount()) - (finalSubtypeData.getMean() * finalSubtypeData.getMean())));
 		
 		context.write(key, new AvroValue<ClickSubtypeStatisticsData>(finalSubtypeData.build()));
 	}

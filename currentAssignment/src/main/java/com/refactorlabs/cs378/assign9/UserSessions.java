@@ -88,7 +88,7 @@ public class UserSessions extends Configured implements Tool {
 		AvroJob.setInputValueSchema(submitterJob, Session.getClassSchema());
 		AvroJob.setMapOutputKeySchema(submitterJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setMapOutputValueSchema(submitterJob, ClickSubtypeStatisticsData.getClassSchema());
-		submitterJob.setReducerClass(ClickReduceClass.class);
+		submitterJob.setReducerClass(SubmitterReduceClass.class);
 		submitterJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
 		AvroJob.setOutputKeySchema(submitterJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setOutputValueSchema(submitterJob, ClickSubtypeStatisticsData.getClassSchema());
@@ -105,7 +105,7 @@ public class UserSessions extends Configured implements Tool {
 		AvroJob.setInputValueSchema(clickerJob, Session.getClassSchema());
 		AvroJob.setMapOutputKeySchema(clickerJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setMapOutputValueSchema(clickerJob, ClickSubtypeStatisticsData.getClassSchema());
-		clickerJob.setReducerClass(ClickReduceClass.class);
+		clickerJob.setReducerClass(ClickerReduceClass.class);
 		clickerJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
 		AvroJob.setOutputKeySchema(clickerJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setOutputValueSchema(clickerJob, ClickSubtypeStatisticsData.getClassSchema());
@@ -122,7 +122,7 @@ public class UserSessions extends Configured implements Tool {
 		AvroJob.setInputValueSchema(sharerJob, Session.getClassSchema());
 		AvroJob.setMapOutputKeySchema(sharerJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setMapOutputValueSchema(sharerJob, ClickSubtypeStatisticsData.getClassSchema());
-		sharerJob.setReducerClass(ClickReduceClass.class);
+		sharerJob.setReducerClass(SharerReduceClass.class);
 		sharerJob.setOutputFormatClass(AvroKeyValueOutputFormat.class);
 		AvroJob.setOutputKeySchema(sharerJob, ClickSubtypeStatisticsKey.getClassSchema());
 		AvroJob.setOutputValueSchema(sharerJob, ClickSubtypeStatisticsData.getClassSchema());
@@ -130,13 +130,16 @@ public class UserSessions extends Configured implements Tool {
 		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00001.avro"));
 		FileInputFormat.addInputPath(sharerJob, new Path(appArgs[1] + "/Sharer-m-00002.avro"));
 		FileOutputFormat.setOutputPath(sharerJob, new Path(appArgs[1] + "/SharerData"));
-		
-		submitterJob.submit();
+
 		clickerJob.submit();
+		submitterJob.submit();
 		sharerJob.submit();
+		clickerJob.waitForCompletion(false);
+		submitterJob.waitForCompletion(false);
+		sharerJob.waitForCompletion(false);
 		
 		//create the final job
-		/*
+		
 		Job aggregatorJob = new Job(conf, "UserSessionsAggregator");
 		aggregatorJob.setJarByClass(UserSessions.class);
 		aggregatorJob.setInputFormatClass(AvroKeyValueInputFormat.class);
@@ -149,8 +152,20 @@ public class UserSessions extends Configured implements Tool {
 		aggregatorJob.setOutputFormatClass(TextOutputFormat.class);
 		aggregatorJob.setOutputKeyClass(Text.class);
 		AvroJob.setOutputValueSchema(aggregatorJob, ClickSubtypeStatisticsData.getClassSchema());
-		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/SubmitterData/" + "part-r-00000.avro"))
-		*/
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/SubmitterData/part-r-00000.avro"));
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/SubmitterData/part-r-00001.avro"));
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/SubmitterData/part-r-00002.avro"));
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/SharerData/part-r-00000.avro"));
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/SharerData/part-r-00001.avro"));
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/SharerData/part-r-00002.avro"));
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/ClickerData/part-r-00000.avro"));
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/ClickerData/part-r-00001.avro"));
+		FileInputFormat.addInputPath(aggregatorJob, new Path(appArgs[1] + "/ClickerData/part-r-00002.avro"));
+		FileOutputFormat.setOutputPath(aggregatorJob, new Path(appArgs[1] + "/AggregatedData"));
+
+		aggregatorJob.submit();
+		aggregatorJob.waitForCompletion(false);
+
 		return 0;
 	}
 

@@ -30,35 +30,44 @@ public class SubmitterMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<S
 	public void map(AvroKey<CharSequence> key, AvroValue<Session> value, Context context)
 			throws IOException, InterruptedException {
 
-		CharSequence keyDatum = key.datum();
 		List<Event> events = value.datum().getEvents();
-		
-		Map<EventSubtype, ClickSubtypeStatisticsData.Builder> subtypeMap = new TreeMap<EventSubtype, ClickSubtypeStatisticsData.Builder>();
-		Long totalEvents = 0L;
-		for(Event e : events){
-			ClickSubtypeStatisticsData.Builder thisBuilder;
-			thisBuilder = subtypeMap.get(e.getEventSubtype());
-			if(thisBuilder == null){
-				thisBuilder = ClickSubtypeStatisticsData.newBuilder();
+		if(events.size() <= 1000){
+			Map<EventSubtype, ClickSubtypeStatisticsData.Builder> subtypeMap = new TreeMap<EventSubtype, ClickSubtypeStatisticsData.Builder>();
+			Long totalSessions = 0L;
+			for(Event e : events){
+				ClickSubtypeStatisticsData.Builder thisBuilder;
+				thisBuilder = subtypeMap.get(e.getEventSubtype());
+				if(thisBuilder == null){
+					thisBuilder = ClickSubtypeStatisticsData.newBuilder();
+				}
+
+				if(thisBuilder.hasTotalCount()){
+					thisBuilder.setTotalCount(thisBuilder.getTotalCount() + 1L);
+				}
+				else{
+					thisBuilder.setTotalCount(1L);
+				}
+				subtypeMap.put(e.getEventSubtype(), thisBuilder);
+				totalSessions += 1L;
 			}
 
-			if(thisBuilder.hasSessionCount()){
-				thisBuilder.setSessionCount(thisBuilder.getSessionCount() + 1L);
+			for(EventSubtype thisSubtype : subtypeMap.keySet()){
+				ClickSubtypeStatisticsData.Builder thisBuilder;
+				if(subtypeMap.containsKey(thisSubtype)){
+					thisBuilder = subtypeMap.get(thisSubtype);
+				}
+				else{
+					thisBuilder = ClickSubtypeStatisticsData.newBuilder();
+					thisBuilder.setTotalCount(0L);
+				}
+				thisBuilder.setSessionCount(totalSessions);
+				thisBuilder.setSumOfSquares(thisBuilder.getTotalCount() * thisBuilder.getTotalCount());
+				
+				ClickSubtypeStatisticsKey.Builder keyBuilder = ClickSubtypeStatisticsKey.newBuilder();
+				keyBuilder.setSessionType("SUBMITTER");
+				keyBuilder.setClickSubtype(convertSubtypeToString(thisSubtype));
+				context.write(new AvroKey<ClickSubtypeStatisticsKey>(keyBuilder.build()), new AvroValue<ClickSubtypeStatisticsData>(thisBuilder.build()));
 			}
-			else{
-				thisBuilder.setSessionCount(1L);
-			}
-			totalEvents += 1L;
-		}
-
-		for(EventSubtype thisSubtype : subtypeMap.keySet()){
-			ClickSubtypeStatisticsData.Builder thisBuilder = subtypeMap.get(thisSubtype);
-			thisBuilder.setTotalCount(totalEvents);
-			
-			ClickSubtypeStatisticsKey.Builder keyBuilder = ClickSubtypeStatisticsKey.newBuilder();
-			keyBuilder.setSessionType("SUBMIT");
-			keyBuilder.setClickSubtype(convertSubtypeToString(thisSubtype));
-			context.write(new AvroKey<ClickSubtypeStatisticsKey>(keyBuilder.build()), new AvroValue<ClickSubtypeStatisticsData>(thisBuilder.build()));
 		}
 	}
 
