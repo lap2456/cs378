@@ -97,7 +97,5 @@ public class SessionMapClass extends Mapper<AvroKey<CharSequence>, AvroValue<Ses
 	@Override
 	public void cleanup(Context context) throws InterruptedException,IOException {
 		multipleOutputs.close();
-	} 
-
-	
+	}
 }

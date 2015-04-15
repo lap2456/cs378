@@ -43,15 +43,19 @@ Text, AvroValue<ClickSubtypeStatisticsData>> {
 			}
 			if(!finalSubtypeData.hasSessionCount())
 				finalSubtypeData.setSessionCount(valueDatum.getSessionCount());
+			/*
 			if(!finalSubtypeData.hasTotalCount())
 				finalSubtypeData.setTotalCount(0L);
 			finalSubtypeData.setTotalCount(finalSubtypeData.getTotalCount() + valueDatum.getTotalCount());
+			*/
+			if(!finalSubtypeData.hasTotalCount())
+				finalSubtypeData.setTotalCount(valueDatum.getTotalCount());
 			if(!finalSubtypeData.hasSumOfSquares())
 				finalSubtypeData.setSumOfSquares(0L);
 			finalSubtypeData.setSumOfSquares(finalSubtypeData.getSumOfSquares() + valueDatum.getSumOfSquares());
 		}
 
-		finalSubtypeData.setMean((double)(finalSubtypeData.getTotalCount()/finalSubtypeData.getSessionCount()));
+		finalSubtypeData.setMean(((double)finalSubtypeData.getTotalCount())/((double)finalSubtypeData.getSessionCount()));
 		finalSubtypeData.setVariance((((double)finalSubtypeData.getSumOfSquares())/((double)finalSubtypeData.getSessionCount()) - (finalSubtypeData.getMean() * finalSubtypeData.getMean())));
 		
 		context.write(key, new AvroValue<ClickSubtypeStatisticsData>(finalSubtypeData.build()));

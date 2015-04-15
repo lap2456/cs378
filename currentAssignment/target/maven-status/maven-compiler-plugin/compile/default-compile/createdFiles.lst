@@ -1,6 +1,6 @@
+com/refactorlabs/cs378/assign9/SubmitterReduceClass.class
 com/refactorlabs/cs378/assign4/AggregatorMapClass.class
 com/refactorlabs/cs378/assign9/ClickSubtypeStatisticsData.class
-com/refactorlabs/cs378/assign9/ClickReduceClass.class
 com/refactorlabs/cs378/assign6/EventType.class
 com/refactorlabs/cs378/assign5/ReduceClass.class
 com/refactorlabs/cs378/assign9/EventType.class
@@ -22,6 +22,7 @@ com/refactorlabs/cs378/assign3/InvertedIndex.class
 com/refactorlabs/cs378/assign9/Event$1.class
 com/refactorlabs/cs378/assign8/Session$1.class
 com/refactorlabs/cs378/assign8/Condition.class
+com/refactorlabs/cs378/assign9/SharerReduceClass.class
 com/refactorlabs/cs378/assign8/CabStyle.class
 com/refactorlabs/cs378/assign5/WordStatisticsData.class
 com/refactorlabs/cs378/assign4/WordStatisticsWritable.class
@@ -31,12 +32,14 @@ com/refactorlabs/cs378/assign6/Condition.class
 com/refactorlabs/cs378/assign2/MapClass.class
 com/refactorlabs/cs378/assign9/ComparableEvent.class
 com/refactorlabs/cs378/assign6/UserSessions.class
+com/refactorlabs/cs378/assign9/AggregatorMapClass.class
 com/refactorlabs/cs378/assign2/DoubleArrayWritable.class
 com/refactorlabs/cs378/assign8/EventType.class
 com/refactorlabs/cs378/assign6/BodyStyle.class
 com/refactorlabs/cs378/assign9/ClickerMapClass$1.class
 com/refactorlabs/cs378/assign9/ClickSubtypeStatisticsKey$Builder.class
 com/refactorlabs/cs378/assign6/Event$Builder.class
+com/refactorlabs/cs378/assign9/AggregatorReduceClass.class
 com/refactorlabs/cs378/assign1/WordCount.class
 com/refactorlabs/cs378/assign6/MapClass.class
 com/refactorlabs/cs378/assign4/MapClass.class
@@ -66,6 +69,7 @@ com/refactorlabs/cs378/assign1/WordCount$ReduceClass.class
 com/refactorlabs/cs378/assign4/WordStatisticsAggregator.class
 com/refactorlabs/cs378/assign9/Event.class
 com/refactorlabs/cs378/assign8/UserSessions.class
+com/refactorlabs/cs378/assign9/ClickerReduceClass.class
 com/refactorlabs/cs378/assign9/SubmitterMapClass.class
 com/refactorlabs/cs378/assign6/Session$Builder.class
 com/refactorlabs/cs378/assign5/WordStatisticsAvro.class

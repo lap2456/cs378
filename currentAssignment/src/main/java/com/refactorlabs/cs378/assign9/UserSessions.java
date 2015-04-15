@@ -134,9 +134,9 @@ public class UserSessions extends Configured implements Tool {
 		clickerJob.submit();
 		submitterJob.submit();
 		sharerJob.submit();
-		clickerJob.waitForCompletion(false);
-		submitterJob.waitForCompletion(false);
-		sharerJob.waitForCompletion(false);
+		clickerJob.waitForCompletion(true);
+		submitterJob.waitForCompletion(true);
+		sharerJob.waitForCompletion(true);
 		
 		//create the final job
 		
@@ -164,7 +164,7 @@ public class UserSessions extends Configured implements Tool {
 		FileOutputFormat.setOutputPath(aggregatorJob, new Path(appArgs[1] + "/AggregatedData"));
 
 		aggregatorJob.submit();
-		aggregatorJob.waitForCompletion(false);
+		aggregatorJob.waitForCompletion(true);
 
 		return 0;
 	}
